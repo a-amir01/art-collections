@@ -20,7 +20,7 @@ const paintingSchema = mongoose.Schema({
 
     // similars: {
     //     paintings: [{
-    //         _id: { type: String, ref: 'Painting' }
+    //         _id: { inputType: String, ref: 'Painting' }
     //     }]
     // }
     //similars: [ this ],
