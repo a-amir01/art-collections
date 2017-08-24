@@ -16,6 +16,7 @@ import * as actions from '../actions/paintingActions';
 // import CustomOrders from './pages/CustomOrders';
 // import PrivateLessonForm from './pages/PrivateLessonForm';
 // import Exhibitions from './pages/Exhibitions';
+import PaintingForm from './pages/PaintingForm';
 
 class ClientRoutes extends React.Component {
     render() {
@@ -26,10 +27,12 @@ class ClientRoutes extends React.Component {
                     <Navigation/>
                     <div>
                         {/*<Switch>*/}
-                        <Route exact path="/" component={Home}/>
+                        <Route path="/admin" component={PaintingForm}/>
                         <Route path="/biography" component={Biography}/>
                         <Route path="/gallery/:category" component={PaintingList}/>
-                        {/*</Switch>*/}
+                        <Route exact path="/" component={Home}/>
+                        {/*<Route path="/admin" component={Admin}/>*/}
+                        {/*</NSwitch>*/}
                     </div>
                     <Footer/>
                 </div>
