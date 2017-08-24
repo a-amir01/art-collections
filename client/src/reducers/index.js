@@ -2,7 +2,8 @@
  * Created by amirassad on 7/18/17.
  */
 
-import { combineReducers } from 'redux';
+import { combineReducers } from 'redux'
+import { reducer as formReducer } from 'redux-form';
 
 import { paintingReducers } from './paintingReducers';
 
@@ -13,6 +14,7 @@ import { paintingReducers } from './paintingReducers';
  *but other than that, you can use any data storage library as long as it supports immutability. */
 export default combineReducers({
     paintingReducers,
+    form : formReducer,
 
 });
 
