@@ -19,34 +19,37 @@ import { MenuItem, InputGroup, DropdownButton,
 import { bindActionCreators } from 'redux';
 
 import { getPaintings, postPainting, resetButton } from '../../actions/paintingActions';
+import PaintingDropZone from "./PaintingDropZone";
 
 const FIELDS = {
     title: {
+        fieldName: "title",
         label: "Title",
         inputType: "input",
         type: "",
     },
     size: {
+        fieldName: "size",
         label: "Size",
         inputType: "input",
         type: "",
     },
     description: {
+        fieldName: "description",
         label: "Description",
         inputType: "textarea",
         type: "",
     },
     category: {
+        fieldName: "category",
         label: "Category",
         inputType: "input",
         type: "",
-    },
-    file: {
-        label: "Choose from File",
-        inputType: "input",
-        type: "file",
     }
 };
+
+
+const FILES = [];
 
 class PaintingForm extends React.Component {
 
@@ -54,47 +57,36 @@ class PaintingForm extends React.Component {
         super(props);
         this.getComponentForField = this.getComponentForField.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.renderDropZone = this.renderDropZone.bind(this);
+        // this.dropZoneData = this.dropZoneData(this);
+        // this.renderDropZone = this.renderDropZone.bind(this);
+        // this.onDrop = this.onDrop.bind(this);
         this.state = {
-            images: [{}],
+            images: [],
             img: '',
             category: '',
-        }
+        };
     }
 
-    componentDidMount() {
-
+    dropZoneData(file) {
+        this.setState({ images: this.state.images.concat(file)});
+        FILES.push(file);
+        console.log("from dropZone", FILES);
+        console.log("from dropZone", file);
+        console.log("Sate in dropZoneData ", this.state);
 
     }
 
-    renderDropZone(field) {
-        const files = field.input.value;
-        const { meta: { touched, error }, fieldConfig  } = field;
-        return (
-            <div>
-                <DropZone
-                    name={ field.label }
-                    onDrop={ (filesToUpload, rejectedFiles) => field.input.onChange(filesToUpload)}
-                >
-                <div>Try dropping some files here, or click to select files to upload.</div>
-                </DropZone>
-                { field.meta.touched && field.meta.error && <span className="error">{field.meta.error}</span> }
-                {files && Array.isArray(files) && (
-                    <ul>
-                        { files.map((file, i) => <li key={i}>{file.name}</li>) }
-                    </ul>
-                )}
-            </div>
-        );
-    }
+    // componentDidMount() {
+    //
+    // }
 
-
+    // componentDidUpdate() {
+    //
+    // }
 
     renderField(field) {
         console.log("IN renderField ", field.input);
         const { meta: { touched, error }, fieldConfig  } = field;
-        if(fieldConfig.type === 'file')
-            return this.renderDropZone(field);
 
         const className = `form-group ${touched && error ? 'has-danger': ''}`;
 
@@ -117,14 +109,21 @@ class PaintingForm extends React.Component {
     }
 
     getComponentForField(field) {
+        console.log("getComponentForField " , field.fieldConfig.fieldName);
 
-        switch (field.title){
-            case FIELDS.title.name:
-            case FIELDS.categories.name:
-            case FIELDS.content.name:
-            case FIELDS.content.category:
+        const { fieldConfig, } = field;
+        const { title, size, description, category } = FIELDS;
+
+        switch (fieldConfig.fieldName){
+            case title.fieldName:
+            case size.fieldName:
+            case description.fieldName:
+            case category.fieldName:
+                console.log("getComponentForField FIELDS.category.fieldName");
                 return this.renderField(field);
+
         }
+
     }
 
     onSubmit(values) {
@@ -166,6 +165,10 @@ class PaintingForm extends React.Component {
                                     })
                                 }
                             </form>
+
+                            <PaintingDropZone
+                                DropZone={ this.dropZoneData.bind(this) }
+                            />
                         </Panel>
                     </Col>
                 </Row>
