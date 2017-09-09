@@ -17,6 +17,7 @@ import * as actions from '../actions/paintingActions';
 // import PrivateLessonForm from './pages/PrivateLessonForm';
 // import Exhibitions from './pages/Exhibitions';
 import PaintingForm from './pages/PaintingForm';
+import PaintingDropZone from './pages/PaintingDropZone';
 
 class ClientRoutes extends React.Component {
     render() {
@@ -27,6 +28,7 @@ class ClientRoutes extends React.Component {
                     <Navigation/>
                     <div>
                         {/*<Switch>*/}
+                        <Route path="/drop" component={PaintingDropZone}/>
                         <Route path="/admin" component={PaintingForm}/>
                         <Route path="/biography" component={Biography}/>
                         <Route path="/gallery/:category" component={PaintingList}/>

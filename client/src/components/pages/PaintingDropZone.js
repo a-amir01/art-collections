@@ -4,17 +4,29 @@
 
 import React from 'react';
 import DropZone from 'react-dropzone';
+import { Link } from 'react-router-dom';
 import FileReader from 'filereader';
+import { Button } from 'react-bootstrap';
+import FillPaintingForms from "./FillPaintingForms";
 
 class PaintingDropZone extends React.Component {
     constructor(props) {
         super(props);
         this.onDrop = this.onDrop.bind(this);
+        this.onNext = this.onNext.bind(this);
         this.state = {
+            next: false,
             images: []
         };
     }
 
+    onNext(){
+        if(this.state.images.length === 0)
+            alert("Must drop one or more pictures into the bucket!");
+        else
+            this.setState({ next: true });
+
+    }
     onDrop(files) {
         // files.forEach(file => {
         //     const reader = new window.FileReader();
@@ -30,11 +42,11 @@ class PaintingDropZone extends React.Component {
         // });
 
         //pass the data back for each drop zone
-        this.props.DropZone(files);
+        // this.props.DropZone(files);
         this.setState({ images: this.state.images.concat(files) });
     }
     render() {
-        const { images } = this.state;
+        const { images, next } = this.state;
         return (
             <section>
                 <div>
@@ -46,12 +58,16 @@ class PaintingDropZone extends React.Component {
 
                 </div>
                 <aside>
-                    <h2>{this.state.images.length}</h2>
+                    <h2>{images.length}</h2>
                     {
-                        this.state.images.map(file =>
+                        images.map(file =>
                             <div key={ file.name }><img src={ file.preview } key={file.name}/>{file.name}</div> )
                     }
                 </aside>
+                <Button bsStyle="primary" bsSize="lg" active onClick={ this.onNext }>Next</Button>
+                { next ? <FillPaintingForms
+                            images={images}/>
+                       : "" }
             </section>
         );
     }

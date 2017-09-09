@@ -45,6 +45,12 @@ const FIELDS = {
         label: "Category",
         inputType: "input",
         type: "",
+    },
+    image: {
+        fieldName: "image",
+        label: "Image",
+        inputType: "img",
+        type: "",
     }
 };
 
@@ -86,6 +92,10 @@ class PaintingForm extends React.Component {
 
     renderField(field) {
         console.log("IN renderField ", field.input);
+
+        if(field.input.name === "image"){
+            return ( <img src={ this.props.imgFile.preview } key={this.props.imgFile.name}/> )
+        }
         const { meta: { touched, error }, fieldConfig  } = field;
 
         const className = `form-group ${touched && error ? 'has-danger': ''}`;
@@ -112,13 +122,14 @@ class PaintingForm extends React.Component {
         console.log("getComponentForField " , field.fieldConfig.fieldName);
 
         const { fieldConfig, } = field;
-        const { title, size, description, category } = FIELDS;
+        const { title, size, description, category, image } = FIELDS;
 
         switch (fieldConfig.fieldName){
             case title.fieldName:
             case size.fieldName:
             case description.fieldName:
             case category.fieldName:
+            case image.fieldName:
                 console.log("getComponentForField FIELDS.category.fieldName");
                 return this.renderField(field);
 
@@ -166,9 +177,9 @@ class PaintingForm extends React.Component {
                                 }
                             </form>
 
-                            <PaintingDropZone
-                                DropZone={ this.dropZoneData.bind(this) }
-                            />
+                            {/*<PaintingDropZone*/}
+                                {/*DropZone={ this.dropZoneData.bind(this) }*/}
+                            {/*/>*/}
                         </Panel>
                     </Col>
                 </Row>
