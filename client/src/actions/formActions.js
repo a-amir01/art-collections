@@ -41,3 +41,17 @@ function submitForm(form) {
             //dispatch({type: "POST_FORM_REJECTED", payload: "there was an error while posting a new book"})
         });
 }
+
+export function writeFileToDisk(file){
+    console.log("WRITE FILE TO DISK\n");
+
+    let ff = {f : file};
+
+    axios.post("/api/file", ff)
+        .then((res) => {
+            console.log("FILE SUCCESS ", res);
+        });
+    return {
+        type : "WRITE_FILE",
+    }
+}

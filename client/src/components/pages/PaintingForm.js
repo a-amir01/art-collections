@@ -8,6 +8,7 @@
  */
 
 import React from 'react';
+import axios from 'axios';
 import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -61,7 +62,7 @@ class PaintingForm extends React.Component {
         super(props);
         this.getComponentForField = this.getComponentForField.bind(this);
         this.submit = this.submit.bind(this);
-        // this.addImageToForm = this.addImageToForm.bind(this);
+        this.writeFileToDisk = this.writeFileToDisk.bind(this);
         this.state = {
             images: [],
             img: '',
@@ -120,10 +121,28 @@ class PaintingForm extends React.Component {
 
     submit(values) {
         const formID = values.title;
-        console.log('\n\n\n\nSAVING FORM!!!\n\n\n\n\n\n\n\n\n\n\n\n\n', formID);
         //addImageToForm
-        values["image"] = this.props.imgFile;
+        //"./uploads is from root of eli-collections/upload
+        console.log("SUBMIT\n\n\n\n" , this.props.imgFile.name);
+        values["image"] = this.props.imgFile.name;
+        this.writeFileToDisk(this.props.imgFile);
         this.props.saveForm(values, formID);
+    }
+
+    writeFileToDisk(file){
+        let formDataImg = new FormData();
+        console.log(file);
+        formDataImg.append('file', file);
+        axios.post("/api/file", formDataImg, {'accept': 'application/json', 'Content-Type' : 'multipart/form-data'})
+            .then((res) => {
+                alert("success");
+                console.log('success');
+            })
+            .catch((err) => {
+                alert(err);
+                console.log(err);
+            });
+
     }
 
     render(){

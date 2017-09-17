@@ -10,8 +10,8 @@ const mongoStore = require('connect-mongo')(session);
 const app = express();
 
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true }));
 app.use(cookieParser());
 
 const mongoose = require('mongoose');
@@ -62,8 +62,6 @@ if (app.get('env') === 'production') {
 }else{
     sess.cookie.secure = false;
 }
-
-
 
 app.listen(process.env.PORT || 3001, (err)=>{
     if(err) return conssole.log(err);

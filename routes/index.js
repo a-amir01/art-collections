@@ -2,6 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const Painting = require('../models/painting');
+const fs = require('fs');
+const multer  = require('multer');
 
 router.route('/gallery')
     .get((req, res, next) =>{
@@ -36,6 +38,19 @@ router.route('/gallery/:category')
                 throw err;
             res.json(paintings)
         })
+    });
+
+const storage = multer.diskStorage({
+    destination: './client/public/uploads',
+    filename(req, file, callBack) {
+        callBack(null, file.originalname);
+    },
+});
+
+const upload = multer({ storage });
+router.route('/file')
+    .post(upload.single('file'), (req, res, next) => {
+       //file is already of disk
     });
 
 module.exports = router;

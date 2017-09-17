@@ -3,11 +3,18 @@
  */
 
 import React from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+import requestAgent from 'superagent';
+
 import DropZone from 'react-dropzone';
 import { Link } from 'react-router-dom';
 import FileReader from 'filereader';
 import { Button } from 'react-bootstrap';
 import FillPaintingForms from "./FillPaintingForms";
+
+// let jsonfile = require('jsonfile');
 
 
 // const dropzoneStyle = {
@@ -34,25 +41,15 @@ class PaintingDropZone extends React.Component {
             this.setState({ next: true });
 
     }
+    //https://stackoverflow.com/questions/39663961/how-do-you-send-images-to-node-js-with-axios
+    // https://medium.com/ecmastack/uploading-files-with-react-js-and-node-js-e7e6b707f4ef
     onDrop(files) {
-        // files.forEach(file => {
-        //     const reader = new window.FileReader();
-        //     reader.onload = () => {
-        //         const fileAsBinaryString = reader.result;
-        //         this.setState({ images: this.state.images.concat(fileAsBinaryString) });
-        //         console.log("FileReader ", fileAsBinaryString);
-        //            writeFIleToDisk(fileAsBinaryString)
-        //         // do whatever you want with the file content
-        //     };
-        //     reader.onabort = () => console.log('file reading was aborted');
-        //     reader.onerror = () => console.log('file reading has failed');
-        //     reader.readAsBinaryString(file);
-        // });
+        console.log("ONDROP\n\n\n\n");
 
-        //pass the data back for each drop zone
-        // this.props.DropZone(files);
+
         this.setState({ images: this.state.images.concat(files), next: true });
     }
+
     render() {
         const { images, next } = this.state;
         return (
@@ -82,5 +79,8 @@ class PaintingDropZone extends React.Component {
     }
 }
 
-export default PaintingDropZone;
+function mapDispatchToProps(dispatch){
+    return bindActionCreators({ }, dispatch);
+}
 
+export default connect(null, mapDispatchToProps)(PaintingDropZone);

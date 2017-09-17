@@ -11,7 +11,7 @@ export function paintingFormReducer(state=initState, action){
 
     switch(action.type){
         case "SAVE_FORM":
-            console.log("SAVEFORM payload" , ...action.payload)
+            console.log("SAVEFORM payload" , ...action.payload);
                 console.log( "SAVE FORM NAME:",  action.formName);
 
             const currentForms = {...state.forms};

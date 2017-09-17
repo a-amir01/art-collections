@@ -36,7 +36,7 @@ class Painting extends React.Component {
 					</Col>
                     {/*//todo: using local files is not allowed in chrome*/}
 					<Col xs={6} sm={8}>
-						<img src={this.props.image.preview} />
+						<img src={`/public/${this.props.image} `} />
 					</Col>
 				</Row>
 			</Well>

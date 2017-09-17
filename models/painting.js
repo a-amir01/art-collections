@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 
 const paintingSchema = mongoose.Schema({
     title: String,
-    image: Object,
+    image: String,
     size: String,
     style: String,
     category: String,
