@@ -8,15 +8,15 @@ const mongoose = require('mongoose');
 
 const paintingSchema = mongoose.Schema({
     title: String,
-    image: String,
+    image: Object,
     size: String,
     style: String,
     category: String,
-    Description: String,
-    tags: [ String ],
-    price: Number,
-    created: Number,
-    similars: [{ type: mongoose.Schema.Types.ObjectId, ref: "Painting" }],
+    description: String,
+    // tags: [ String ],
+    // price: Number,
+    // created: Number,
+    // similars: [{ type: mongoose.Schema.Types.ObjectId, ref: "Painting" }],
 
     // similars: {
     //     paintings: [{

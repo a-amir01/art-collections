@@ -1,4 +1,3 @@
-"use strict";
 
 const express = require('express');
 const router = express.Router();
@@ -6,6 +5,7 @@ const Painting = require('../models/painting');
 
 router.route('/gallery')
     .get((req, res, next) =>{
+        console.log("POST!!!!\n" ,req.body);
         //get all paintings in database
         Painting.find((err, paintings) => {
             if(err)
@@ -15,6 +15,7 @@ router.route('/gallery')
 
     })
     .post((req, res, next) =>{
+        console.log("POST!!!!\n" ,req.body);
         const painting = req.body; //copy array
         Painting.create(painting, (err, paintings)=>{
             if(err)

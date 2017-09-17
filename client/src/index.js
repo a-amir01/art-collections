@@ -3,23 +3,20 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 import { applyMiddleware, createStore } from 'redux';
-//import { composeWithDevTools } from 'redux-devtools-extension';
-//import registerServiceWorker from './registerServiceWorker';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 import logger from 'redux-logger';
-import reduxThunk from 'redux-thunk';
+import thunk from 'redux-thunk';
 
 import reducers from './reducers/index';
 import ClientRoutes from './components/ClientRoutes';
 
-// import axios from 'axios';
-// window.axios = axios;
+//import registerServiceWorker from './registerServiceWorker';
 
-const middleware = { reduxThunk, logger };
-const store = createStore(reducers,{}, applyMiddleware(reduxThunk, logger));
-// const store = createStore(reducers, {},/*initialState,*/ composeWithDevTools(
-//     applyMiddleware(...middleware),
-// ));
+// const store = createStore(reducers,{}, applyMiddleware(reduxThunk, logger));
+const store = createStore(reducers, {},/*initialState,*/ composeWithDevTools(
+    applyMiddleware(thunk, logger),
+));
 
 
 const Routes = (

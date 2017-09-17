@@ -6,6 +6,7 @@ import { combineReducers } from 'redux'
 import { reducer as formReducer } from 'redux-form';
 
 import { paintingReducers } from './paintingReducers';
+import { paintingFormReducer } from './paintingFormReducer';
 
 //https://facebook.github.io/immutable-js/
 /*Redux doesn't care how you store the state—it can be a plain object,
@@ -14,6 +15,7 @@ import { paintingReducers } from './paintingReducers';
  *but other than that, you can use any data storage library as long as it supports immutability. */
 export default combineReducers({
     paintingReducers,
+    paintingFormReducer,
     form : formReducer,
 
 });

@@ -24,7 +24,7 @@ export function getPaintingsByCategory(category) {
     return (dispatch) => {
         axios.get("/api/gallery/" + category)
             .then(res => {
-                console.log("paintingActions::getPaintingsByCategory Got Paintings");
+                console.log("paintingActions::getPaintingsByCategory Got Paintings ", res.data);
                 dispatch({type: "GET_PAINTINGS", payload: res.data})
             })
             .catch(err => {
@@ -37,7 +37,7 @@ export function getPaintingsByCategory(category) {
 export function postPainting(painting, category) {
     console.log("paintingActions: postPainting");
     return (dispatch) => {
-        axios.post("api/gallery/" + category, painting)
+        axios.post("/api/gallery/" + category, painting)
             .then(res => {
                 dispatch({type:"POST_PAINTING", payload: res.data})
             })
@@ -50,7 +50,7 @@ export function postPainting(painting, category) {
 export function deletePainting(id) {
     console.log("paintingActions: deletePainting");
     return (dispatch) => {
-        axios.delete("api/gallery/" + id)
+        axios.delete("/api/gallery/" + id)
             .then(res=>{
                 dispatch({type:"DELETE_PAINTING", payload: id})
             })

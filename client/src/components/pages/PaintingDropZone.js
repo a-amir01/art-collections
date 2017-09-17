@@ -9,6 +9,13 @@ import FileReader from 'filereader';
 import { Button } from 'react-bootstrap';
 import FillPaintingForms from "./FillPaintingForms";
 
+
+// const dropzoneStyle = {
+//     width  : "100%",
+//     height : "50%",
+//     border : "1px solid black"
+// };
+
 class PaintingDropZone extends React.Component {
     constructor(props) {
         super(props);
@@ -34,6 +41,7 @@ class PaintingDropZone extends React.Component {
         //         const fileAsBinaryString = reader.result;
         //         this.setState({ images: this.state.images.concat(fileAsBinaryString) });
         //         console.log("FileReader ", fileAsBinaryString);
+        //            writeFIleToDisk(fileAsBinaryString)
         //         // do whatever you want with the file content
         //     };
         //     reader.onabort = () => console.log('file reading was aborted');
@@ -43,7 +51,7 @@ class PaintingDropZone extends React.Component {
 
         //pass the data back for each drop zone
         // this.props.DropZone(files);
-        this.setState({ images: this.state.images.concat(files) });
+        this.setState({ images: this.state.images.concat(files), next: true });
     }
     render() {
         const { images, next } = this.state;
@@ -52,19 +60,20 @@ class PaintingDropZone extends React.Component {
                 <div>
                     <DropZone
                         name="MyDropZone"
-                        onDrop={ this.onDrop } >
+                        onDrop={ this.onDrop }>
                         <div>Try dropping some files here, or click to select files to upload.</div>
                     </DropZone>
 
                 </div>
                 <aside>
                     <h2>{images.length}</h2>
-                    {
-                        images.map(file =>
-                            <div key={ file.name }><img src={ file.preview } key={file.name}/>{file.name}</div> )
-                    }
+                    {/*{*/}
+                        {/*images.map(file =>*/}
+                            {/*<div key={ file.name }><img src={ file.preview } key={file.name}/>{file.name}</div> )*/}
+                    {/*}*/}
                 </aside>
-                <Button bsStyle="primary" bsSize="lg" active onClick={ this.onNext }>Next</Button>
+
+                {/*<Button bsStyle="primary" bsSize="lg" active onClick={ this.onNext }>Next</Button>*/}
                 { next ? <FillPaintingForms
                             images={images}/>
                        : "" }

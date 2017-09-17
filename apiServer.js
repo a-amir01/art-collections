@@ -16,7 +16,9 @@ app.use(cookieParser());
 
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/art-collection');
+// mongoose.connect('mongodb://localhost:27017/art-collection');
+
+mongoose.connect('mongodb://demouser:demo@ds139964.mlab.com:39964/eli-collections');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDb - connection error: '));

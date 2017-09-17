@@ -7,12 +7,12 @@ const initState = {
 };
 
 export function paintingReducers(state=initState, action){
-	console.log("In paintingReducers\n");
+	console.log("In paintingReducers\n ", action.type);
 
-	switch(action.inputType){
+	switch(action.type){
         case "GET_PAINTINGS":
-            console.log(...action.payload)
-			return {...state, paintings:[...action.payload]}
+            console.log("GET_PAINTINGS", action.payload);
+			return {...state, paintings:[...action.payload]};
 			// break;
         case "POST_PAINTING":
             return {...state, paintings:[...state.paintings, ...action.payload]}
