@@ -28,7 +28,7 @@ class PaintingList extends React.Component {
                         _id={painting._id}
                         title={painting.title}
                         description={painting.description}
-                        images={painting.images}
+                        image={painting.image}
                     />
                 </Col>
             )

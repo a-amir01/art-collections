@@ -28,12 +28,10 @@ class ClientRoutes extends React.Component {
                     <Navigation/>
                     <div>
                         {/*<Switch>*/}
-                        <Route path="/drop" component={PaintingDropZone}/>
-                        <Route path="/admin" component={PaintingForm}/>
+                        <Route path="/admin" component={PaintingDropZone}/>
                         <Route path="/biography" component={Biography}/>
                         <Route path="/gallery/:category" component={PaintingList}/>
                         <Route exact path="/" component={Home}/>
-                        {/*<Route path="/admin" component={Admin}/>*/}
                         {/*</NSwitch>*/}
                     </div>
                     <Footer/>

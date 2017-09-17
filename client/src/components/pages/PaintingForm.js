@@ -2,14 +2,16 @@
  * Created by amirassad on 7/18/17.
  */
 
-// https://redux-form.com/7.0.1/examples/
+/* https://redux-form.com/7.0.1/examples/
+ * how to have multiple forms in one page
+ * https://stackoverflow.com/questions/37456526/how-to-embed-the-same-redux-form-multiple-times-on-a-page/37464048#37464048
+ */
 
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import DropZone from 'react-dropzone';
-import axios from 'axios';
+
 import _ from 'lodash';
 
 import { MenuItem, InputGroup, DropdownButton,
@@ -17,9 +19,8 @@ import { MenuItem, InputGroup, DropdownButton,
         FormGroup, ControlLabel, Button} from 'react-bootstrap';
 
 import { bindActionCreators } from 'redux';
+import { saveForm } from '../../actions/formActions';
 
-import { getPaintings, postPainting, resetButton } from '../../actions/paintingActions';
-import PaintingDropZone from "./PaintingDropZone";
 
 const FIELDS = {
     title: {
@@ -46,26 +47,21 @@ const FIELDS = {
         inputType: "input",
         type: "",
     },
-    image: {
-        fieldName: "image",
-        label: "Image",
-        inputType: "img",
-        type: "",
-    }
+    // image: {
+    //     fieldName: "image",
+    //     label: "Image",
+    //     inputType: "",
+    //     type: "",
+    // }
 };
-
-
-const FILES = [];
 
 class PaintingForm extends React.Component {
 
     constructor(props) {
         super(props);
         this.getComponentForField = this.getComponentForField.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-        // this.dropZoneData = this.dropZoneData(this);
-        // this.renderDropZone = this.renderDropZone.bind(this);
-        // this.onDrop = this.onDrop.bind(this);
+        this.submit = this.submit.bind(this);
+        // this.addImageToForm = this.addImageToForm.bind(this);
         this.state = {
             images: [],
             img: '',
@@ -73,29 +69,15 @@ class PaintingForm extends React.Component {
         };
     }
 
-    dropZoneData(file) {
-        this.setState({ images: this.state.images.concat(file)});
-        FILES.push(file);
-        console.log("from dropZone", FILES);
-        console.log("from dropZone", file);
-        console.log("Sate in dropZoneData ", this.state);
-
-    }
-
-    // componentDidMount() {
-    //
-    // }
-
-    // componentDidUpdate() {
-    //
-    // }
-
     renderField(field) {
         console.log("IN renderField ", field.input);
 
-        if(field.input.name === "image"){
-            return ( <img src={ this.props.imgFile.preview } key={this.props.imgFile.name}/> )
-        }
+        // if(field.input.name === "image"){
+        //     return (
+        //         <img src={ this.props.imgFile.preview } key={this.props.imgFile.name}/>
+        //
+        //     )
+        // }
         const { meta: { touched, error }, fieldConfig  } = field;
 
         const className = `form-group ${touched && error ? 'has-danger': ''}`;
@@ -115,7 +97,7 @@ class PaintingForm extends React.Component {
                     {touched ? error : "" }
                 </div>
             </div>
-        )
+        );
     }
 
     getComponentForField(field) {
@@ -129,41 +111,30 @@ class PaintingForm extends React.Component {
             case size.fieldName:
             case description.fieldName:
             case category.fieldName:
-            case image.fieldName:
+            // case image.fieldName:
                 console.log("getComponentForField FIELDS.category.fieldName");
                 return this.renderField(field);
-
         }
 
     }
 
-    onSubmit(values) {
-        this.props.createPost(values, () => {
-            this.props.history.push('/');
-        });
+    submit(values) {
+        const formID = values.title;
+        console.log('\n\n\n\nSAVING FORM!!!\n\n\n\n\n\n\n\n\n\n\n\n\n', formID);
+        //addImageToForm
+        values["image"] = this.props.imgFile;
+        this.props.saveForm(values, formID);
     }
 
     render(){
         const { handleSubmit } = this.props;
-
-        // const imgList = this.state.images.map((img, i) => {
-        //     const pic = "/images/" + img.name;
-        //     return (
-        //         <MenuItem className="img" key={i} eventKey={ img.name } onClick={ this.handleImgSelect(img.name) }>
-        //             <div style={{ position: "relative" }}>
-        //                 <img src={pic}/>
-        //                 <div style={{paddingTop: "5px"}}>{imgArr.name}</div>
-        //             </div>
-        //         </MenuItem>
-        //     )
-        // });
 
         return (
             <Well>
                 <Row>
                     <Col xs={12} sm={6}>
                         <Panel>
-                            <form onSubmit={ handleSubmit(this.onSubmit) }>
+                            <form onSubmit={ handleSubmit(this.submit) }>
                                 {
                                     _.map(FIELDS, (fieldConfig, field) => {
                                         return ( <Field
@@ -175,11 +146,13 @@ class PaintingForm extends React.Component {
                                         />)
                                     })
                                 }
+                                <div>
+                                    <img src={ this.props.imgFile.preview } key={this.props.imgFile.name}/>
+                                </div>
+                                <div>
+                                    <Button id="saveb" type="submit" bsStyle="primary" bsSize="lg" active>Save</Button>
+                                </div>
                             </form>
-
-                            {/*<PaintingDropZone*/}
-                                {/*DropZone={ this.dropZoneData.bind(this) }*/}
-                            {/*/>*/}
                         </Panel>
                     </Col>
                 </Row>
@@ -192,7 +165,7 @@ function validate(values) {
     console.log("in validate!!", values);
     const errors = {};
 
-    //inputType: value, field: key
+    // inputType: value, field: key
     _.each(FIELDS, (config, field) => {
         if(!values[field]) {
             errors[field] = `Enter a ${field}`;
@@ -206,12 +179,11 @@ function validate(values) {
 
 function mapStateToProps(state){
     return {
-
     }
 }
 
 function mapDispatchToProps(dispatch){
-    return bindActionCreators({ getPaintings }, dispatch);
+    return bindActionCreators({ saveForm }, dispatch);
 }
 
 PaintingForm = connect(
@@ -221,7 +193,7 @@ PaintingForm = connect(
 
 export default reduxForm({
     validate,
-    form: 'PaintingForm',
+    // form: 'PaintingForm',
     fields: _.keys(FIELDS),
 })(PaintingForm);
 
