@@ -13,7 +13,7 @@ import ClientRoutes from './components/ClientRoutes';
 
 //import registerServiceWorker from './registerServiceWorker';
 
-// const store = createStore(reducers,{}, applyMiddleware(reduxThunk, logger));
+// const store = createStore(reducers,{}, applyMiddleware(thunk, logger));
 const store = createStore(reducers, {},/*initialState,*/ composeWithDevTools(
     applyMiddleware(thunk, logger),
 ));

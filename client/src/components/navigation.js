@@ -29,6 +29,7 @@ class navigation extends React.Component {
                 <NavItem eventKey={4} href="/orders">Orders</NavItem>
                 <NavItem eventKey={5} href="/lessons">Lessons</NavItem>
                 <NavItem eventKey={6} href="/exhibitions">Exhibitions</NavItem>
+                <NavItem eventKey={6} href="/admin">Admin</NavItem>
             </Nav>
         );
     }

@@ -28,13 +28,14 @@ class Painting extends React.Component {
 						<h6>Title: {this.props.title}</h6>
 						<p>Description: {(this.props.description.length > 18 && this.state.readMore === false) ?
 							(this.props.description.substring(0,18)) : (this.props.description)}
-							<button className='link' onClick={this.onReadMore.bind(this)}>
-								{(this.state.readMore === false && this.props.description !== null &&
-								this.props.description.length > 18) ? ('...read more'): ('')}
-							</button>
+							{/*<button className='link' onClick={this.onReadMore.bind(this)}>*/}
+								{/*{(this.state.readMore === false && this.props.description !== null &&*/}
+								{/*this.props.description.length > 18) ? ('...read more'): ('')}*/}
+							{/*</button>*/}
 						</p>
 					</Col>
-					<Col xs={12} sm={4}>
+                    {/*//todo: using local files is not allowed in chrome*/}
+					<Col xs={6} sm={8}>
 						<img src={this.props.image.preview} />
 					</Col>
 				</Row>

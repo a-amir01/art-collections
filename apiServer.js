@@ -15,10 +15,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 const mongoose = require('mongoose');
-
-// mongoose.connect('mongodb://localhost:27017/art-collection');
-
 mongoose.connect('mongodb://demouser:demo@ds139964.mlab.com:39964/eli-collections');
+// mongoose.connect('mongodb://localhost:27017/art-collection');
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDb - connection error: '));
@@ -42,23 +40,32 @@ const sess = {
 //set up session
 app.use(session(sess));
 
-/*If you have your node.js behind a proxy and are using secure: true,
- *you need to set "trust proxy" in express*/
-if (app.get('env') === 'production') {
-    app.set('trust proxy', 1); // trust first proxy
-    sess.cookie.secure = true // serve secure cookies
-}else{
-    sess.cookie.secure = false;
-}
-
 const index = require('./routes/index');
 // const users = require('./routes/users');
-
 
 app.use('/api', index);
 // app.use('/users', users);
 
-app.listen(3001, (err)=>{
+/*If you have your node.js behind a proxy and are using secure: true,
+ *you need to set "trust proxy" in express*/
+if (app.get('env') === 'production') {
+    app.set('trust proxy', 1); // trust first proxy
+    sess.cookie.secure = true; // serve secure cookies
+    app.use(express.static('client/build'));
+
+    const path = require('path');
+
+    app.get('*', (req, res) => {
+        res.sendfile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+
+}else{
+    sess.cookie.secure = false;
+}
+
+
+
+app.listen(process.env.PORT || 3001, (err)=>{
     if(err) return conssole.log(err);
 
     console.log("API server running on port 3001\n\n")
