@@ -9,6 +9,7 @@
 
 import React from 'react';
 import axios from 'axios';
+import request from 'superagent';
 import { Field, reduxForm } from 'redux-form';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -64,9 +65,7 @@ class PaintingForm extends React.Component {
         this.submit = this.submit.bind(this);
         this.writeFileToDisk = this.writeFileToDisk.bind(this);
         this.state = {
-            images: [],
-            img: '',
-            category: '',
+            imgWritten: false,
         };
     }
 
@@ -123,9 +122,12 @@ class PaintingForm extends React.Component {
         const formID = values.title;
         //addImageToForm
         //"./uploads is from root of eli-collections/upload
-        console.log("SUBMIT\n\n\n\n" , this.props.imgFile.name);
-        values["image"] = this.props.imgFile.name;
-        this.writeFileToDisk(this.props.imgFile);
+
+        if(!this.state.imgWritten) {
+            values["image"] = "/uploads/" + _.replace(this.props.imgFile.name, / /g, '');
+            this.writeFileToDisk(this.props.imgFile);
+            this.setState({imgWritten: true});
+        }
         this.props.saveForm(values, formID);
     }
 
@@ -133,17 +135,31 @@ class PaintingForm extends React.Component {
         let formDataImg = new FormData();
         console.log(file);
         formDataImg.append('file', file);
-        axios.post("/api/file", formDataImg, {'accept': 'application/json', 'Content-Type' : 'multipart/form-data'})
-            .then((res) => {
-                alert("success");
-                console.log('success');
-            })
-            .catch((err) => {
-                alert(err);
-                console.log(err);
-            });
 
+        let req = request
+            .post('/api/file')
+            .send(formDataImg);
+        req.end(function(err,response){
+            if (err) {
+                console.log(err);
+            }
+           console.log("upload done!!!!!");
+        });
+        // axios.post("/api/file", formDataImg, {'accept': 'application/json', 'Content-Type' : 'multipart/form-data'})
+        //     .then((res) => {
+        //         alert("success");
+        //         console.log('success', res);
+        //     })
+        //     .catch((err) => {
+        //         alert(err);
+        //         console.log(err);
+        //     });
     }
+// <form onSubmit={ (e) => {
+//     e.preventDefault();
+//     // e.stopPropagation();
+//     handleSubmit(this.submit);
+// }}>
 
     render(){
         const { handleSubmit } = this.props;
@@ -213,6 +229,7 @@ PaintingForm = connect(
 export default reduxForm({
     validate,
     // form: 'PaintingForm',
+    destroyOnUnmount: false,
     fields: _.keys(FIELDS),
 })(PaintingForm);
 

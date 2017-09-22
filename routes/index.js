@@ -40,18 +40,46 @@ router.route('/gallery/:category')
         })
     });
 
+
+    // var fs = require('fs');
+
+    // function readFiles(dirname, onFileContent, onError) {
+    //     fs.readdir(dirname, function(err, filenames) {
+    //         if (err) {
+    //             onError(err);
+    //             return;
+    //         }
+    //         filenames.forEach(function(filename) {
+    //             fs.readFile(dirname + filename, 'utf-8', function(err, content) {
+    //                 if (err) {
+    //                     onError(err);
+    //                     return;
+    //                 }
+    //                 onFileContent(filename, content);
+    //             });
+    //         });
+    //     });
+    // }
+
+const dest = process.env.NODE_ENV !== 'production' ? './client/public/uploads/' : './client/build/uploads/';
+
 const storage = multer.diskStorage({
-    destination: './client/public/uploads',
+    destination: dest,
     filename(req, file, callBack) {
-        callBack(null, file.originalname);
+        const name = (file.originalname).replace(/ /g, "");
+        callBack(null, name);
     },
 });
 
 const upload = multer({ storage });
 router.route('/file')
     .post(upload.single('file'), (req, res, next) => {
+        //res.json(req.file);
+        console.log("good\n\n");
        //file is already of disk
     });
+
+
 
 module.exports = router;
 

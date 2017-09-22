@@ -6,6 +6,7 @@ import React from 'react';
 import { Image, Row, Col, Well, Button } from 'react-bootstrap';
 // import { connect } from 'react-redux';
 // import {bindActionCreators } from 'redux';
+// import s from '../../uploads/Sensational.jpg';
 
 class Painting extends React.Component {
 	constructor(){
@@ -21,10 +22,11 @@ class Painting extends React.Component {
 
 	render() {
 	    console.log("PAINTING\n", this.props.image);
+
 		return(
 			<Well>
 				<Row>
-					<Col xs={6} sm={8}>
+					<Col xs={10} sm={12}>
 						<h6>Title: {this.props.title}</h6>
 						<p>Description: {(this.props.description.length > 18 && this.state.readMore === false) ?
 							(this.props.description.substring(0,18)) : (this.props.description)}
@@ -35,8 +37,9 @@ class Painting extends React.Component {
 						</p>
 					</Col>
                     {/*//todo: using local files is not allowed in chrome*/}
-					<Col xs={6} sm={8}>
-						<img src={`/public/${this.props.image} `} />
+					<Col xs={10} sm={12}>
+						{/*<Image src={this.props.image} responsive/>*/}
+						<img src={ this.props.image } />
 					</Col>
 				</Row>
 			</Well>
