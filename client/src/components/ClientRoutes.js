@@ -5,7 +5,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Navigation from './navigation';
+import Navigation from './Navigation';
 import Footer from './footer';
 import PaintingList from './pages/PaintingList';
 import Home from './pages/Home';
@@ -17,6 +17,7 @@ import * as actions from '../actions/paintingActions';
 // import PrivateLessonForm from './pages/PrivateLessonForm';
 // import Exhibitions from './pages/Exhibitions';
 import PaintingForm from './pages/PaintingForm';
+import PaintingCategoryForm from './pages/PaintingCategoryForm';
 import PaintingDropZone from './pages/PaintingDropZone';
 
 class ClientRoutes extends React.Component {
@@ -28,10 +29,11 @@ class ClientRoutes extends React.Component {
                     <Navigation/>
                     <div>
                         {/*<Switch>*/}
-                        <Route path="/admin" component={PaintingDropZone}/>
-                        <Route path="/biography" component={Biography}/>
-                        <Route path="/gallery/:category" component={PaintingList}/>
-                        <Route exact path="/" component={Home}/>
+                        <Route path="/admin" component={ PaintingDropZone }/>
+                        <Route path="/category" component={ PaintingCategoryForm }/>
+                        <Route path="/biography" component={ Biography }/>
+                        <Route path="/gallery/:category" component={ PaintingList }/>
+                        <Route exact path="/" component={ Home }/>
                         {/*</NSwitch>*/}
                     </div>
                     <Footer/>

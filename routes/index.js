@@ -2,12 +2,13 @@
 const express = require('express');
 const router = express.Router();
 const Painting = require('../models/painting');
+const PaintingCategory = require('../models/categories');
 const fs = require('fs');
 const multer  = require('multer');
 
 router.route('/gallery')
     .get((req, res, next) =>{
-        console.log("POST!!!!\n" ,req.body);
+        console.log("GET!!!!\n" ,req.body);
         //get all paintings in database
         Painting.find((err, paintings) => {
             if(err)
@@ -39,6 +40,40 @@ router.route('/gallery/:category')
             res.json(paintings)
         })
     });
+
+router.route('/category')
+    .get((req, res, next) => {
+        PaintingCategory.find((err, categories) => {
+            if(err)
+                throw err;
+            res.json(categories)
+        });
+    })
+    .post((req, res, next) => {
+        console.log("BODY ", req.body);
+        const category = req.body; //copy array
+        PaintingCategory.create(category, (err, categoryObj)=>{
+            if(err)
+                throw err;
+            console.log("added ", req.body, "categoryObj ", categoryObj);
+            res.json(categoryObj);
+        });
+    });
+
+router.route('/category/:_id')
+    .delete((req, res) => {
+        const query = {_id: req.params._id};
+        PaintingCategory.remove(query, (err, categories) => {
+            if (err) {
+                console.log(err);
+                return handleError(err);
+            }
+            // console.log("RES\n", categories);
+            res.json("success");
+            // removed!
+        });
+    });
+
 
 
     // var fs = require('fs');

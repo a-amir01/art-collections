@@ -20,8 +20,12 @@ import { MenuItem, InputGroup, DropdownButton,
         Image, Col, Row, Well, Panel, FormControl,
         FormGroup, ControlLabel, Button} from 'react-bootstrap';
 
+import DropdownList from 'react-widgets/lib/DropdownList'
+
 import { bindActionCreators } from 'redux';
-import { saveForm } from '../../actions/formActions';
+import { saveForm } from '../../actions/paintingFormActions';
+import { getAllCategories } from '../../actions/categoryActions';
+import 'react-widgets/dist/css/react-widgets.css';
 
 
 const FIELDS = {
@@ -57,16 +61,24 @@ const FIELDS = {
     // }
 };
 
+const colors = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet'];
+
 class PaintingForm extends React.Component {
 
     constructor(props) {
         super(props);
         this.getComponentForField = this.getComponentForField.bind(this);
+        this.renderField = this.renderField.bind(this);
+        this.renderMultiselect = this.renderMultiselect.bind(this);
         this.submit = this.submit.bind(this);
         this.writeFileToDisk = this.writeFileToDisk.bind(this);
         this.state = {
             imgWritten: false,
         };
+    }
+
+    componentDidMount() {
+        this.props.getAllCategories();
     }
 
     renderField(field) {
@@ -100,6 +112,51 @@ class PaintingForm extends React.Component {
         );
     }
 
+    renderMultiselect(field) {
+        const { input } = field;
+        const { meta: { touched, error }, fieldConfig  } = field;
+        const className = `form-group ${touched && error ? 'has-danger': ''}`;
+        console.log("CATEGORIES:\n" , this.props.categories);
+        const categoryLabels = this.props.categories.map(({ category }) => {
+            return category
+        });
+        console.log("CATEGORIES:\n" , categoryLabels);
+
+
+        return (
+            <div className={className}>
+                <label>
+                    { field.label }
+                </label>
+                <DropdownList {...input}
+                              data={ categoryLabels }
+                              valueField="value"
+                              textField="color"
+                              onChange={input.onChange} />
+                <div className="text-help">
+                    {touched ? error : "" }
+                </div>
+            </div>
+        )
+    }
+
+    // renderCategories(field) {
+    //     return (
+    //         <div>
+    //             <option value="">Select a color...</option>
+    //             {
+    //                 colors.map(colorOption => {
+    //                     return (
+    //                         <option value={colorOption} key={colorOption}>
+    //                         {colorOption}
+    //                         </option>
+    //                     )}
+    //                 )
+    //             }
+    //         </div>
+    //     )
+    // }
+
     getComponentForField(field) {
         console.log("getComponentForField " , field.fieldConfig.fieldName);
 
@@ -110,15 +167,18 @@ class PaintingForm extends React.Component {
             case title.fieldName:
             case size.fieldName:
             case description.fieldName:
+                return this.renderField(field);
             case category.fieldName:
+                return this.renderMultiselect(field);
             // case image.fieldName:
                 console.log("getComponentForField FIELDS.category.fieldName");
-                return this.renderField(field);
+
         }
 
     }
 
     submit(values) {
+        console.log("VALUES: ", values);
         const formID = values.title;
         //addImageToForm
         //"./uploads is from root of eli-collections/upload
@@ -139,6 +199,7 @@ class PaintingForm extends React.Component {
         let req = request
             .post('/api/file')
             .send(formDataImg);
+
         req.end(function(err,response){
             if (err) {
                 console.log(err);
@@ -214,11 +275,12 @@ function validate(values) {
 
 function mapStateToProps(state){
     return {
+        categories: state.categoryReducer.categories,
     }
 }
 
 function mapDispatchToProps(dispatch){
-    return bindActionCreators({ saveForm }, dispatch);
+    return bindActionCreators({ saveForm, getAllCategories}, dispatch);
 }
 
 PaintingForm = connect(

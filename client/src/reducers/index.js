@@ -7,6 +7,7 @@ import { reducer as formReducer } from 'redux-form';
 
 import { paintingReducers } from './paintingReducers';
 import { paintingFormReducer } from './paintingFormReducer';
+import { categoryReducer } from './categoryReducer';
 
 //https://facebook.github.io/immutable-js/
 /*Redux doesn't care how you store the state—it can be a plain object,
@@ -16,6 +17,7 @@ import { paintingFormReducer } from './paintingFormReducer';
 export default combineReducers({
     paintingReducers,
     paintingFormReducer,
+    categoryReducer,
     form : formReducer,
 
 });

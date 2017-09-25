@@ -17,3 +17,7 @@ img {
     display:inline;
     float: right;
 }
+
+#delete-category {
+    float: right;
+}

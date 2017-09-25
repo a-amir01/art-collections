@@ -34,19 +34,6 @@ export function getPaintingsByCategory(category) {
     };
 }
 
-export function postPainting(painting, category) {
-    console.log("paintingActions: postPainting");
-    return (dispatch) => {
-        axios.post("/api/gallery/" + category, painting)
-            .then(res => {
-                dispatch({type:"POST_PAINTING", payload: res.data})
-            })
-            .catch(err => {
-                dispatch({type:"POST_PAINTING_REJECTED", payload: "The was an error posting a new painting"})
-            })
-    }
-}
-
 export function deletePainting(id) {
     console.log("paintingActions: deletePainting");
     return (dispatch) => {
@@ -60,10 +47,10 @@ export function deletePainting(id) {
     }
 }
 
-export function updateBooks(book) {
+export function updatePainting(painting) {
     return {
-        type: "UPDATE_BOOK",
-        payload: book
+        type: "UPDATE_PAINTING",
+        payload: painting
     }
 }
 

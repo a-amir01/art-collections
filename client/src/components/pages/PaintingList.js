@@ -7,9 +7,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Grid, Col, Row, Button } from 'react-bootstrap';
 import { getPaintingsByCategory } from "../../actions/paintingActions";
-
 import Painting from './Painting';
 
+// https://masonry.desandro.com/
 
 class PaintingList extends React.Component {
     componentDidMount(){
@@ -54,7 +54,7 @@ function mapStateToProps(state){
 
 function mapDispatchToProps(dispatch){
     console.log("PaintingList: mapDispatchToProps\n");
-    return bindActionCreators({getPaintingsByCategory}, dispatch);
+    return bindActionCreators({ getPaintingsByCategory }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PaintingList);

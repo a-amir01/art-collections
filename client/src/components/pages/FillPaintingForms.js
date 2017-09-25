@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import { Button } from 'react-bootstrap';
 
 import PaintingForm from './PaintingForm';
-import { submitForms } from '../../actions/formActions';
+import { submitForms } from '../../actions/paintingFormActions';
 
 class FillPaintingForms extends React.Component {
     constructor(props) {
@@ -19,6 +19,7 @@ class FillPaintingForms extends React.Component {
     }
 
     onClick() {
+        console.log("FORMS\n", this.props.form);
         this.props.submitForms(this.props.forms);
     }
 
@@ -45,6 +46,7 @@ class FillPaintingForms extends React.Component {
 }
 
 function mapStateToProps(state){
+    console.log("STATE\n", state);
     return {
         forms: state.paintingFormReducer,
     }

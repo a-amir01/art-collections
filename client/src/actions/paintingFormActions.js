@@ -33,25 +33,11 @@ function submitForm(form) {
     console.log("IN submitForm: ", form);
     axios.post("/api/gallery", form)
         .then((response)=>{
-            console.log("RESPONSE ", response);
+            console.log("RESPONSE SUBMIT FORM", response);
             // dispatch({type:"POST_BOOK", payload: response.data})
         })
         .catch((err)=>{
             alert(err);
             //dispatch({type: "POST_FORM_REJECTED", payload: "there was an error while posting a new book"})
         });
-}
-
-export function writeFileToDisk(file){
-    console.log("WRITE FILE TO DISK\n");
-
-    let ff = {f : file};
-
-    axios.post("/api/file", ff)
-        .then((res) => {
-            console.log("FILE SUCCESS ", res);
-        });
-    return {
-        type : "WRITE_FILE",
-    }
 }
