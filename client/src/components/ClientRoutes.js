@@ -5,20 +5,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Navigation from './Navigation';
-import Footer from './footer';
-import PaintingList from './pages/PaintingList';
-import Home from './pages/Home';
+import NavigationContainer from '../containers/NavigationContainer';
+import Footer from './pages/Footer';
+import PaintingListContainer from '../containers/painting/PaintingListContainer';
+import HomeContainer from '../containers/HomeContainer';
 import Biography from './pages/Biography';
-//import paintingActions from '../actions/paintingActions';
 import * as actions from '../actions/paintingActions';
 
 // import CustomOrders from './pages/CustomOrders';
 // import PrivateLessonForm from './pages/PrivateLessonForm';
 // import Exhibitions from './pages/Exhibitions';
-import PaintingForm from './pages/PaintingForm';
-import PaintingCategoryForm from './pages/PaintingCategoryForm';
-import PaintingDropZone from './pages/PaintingDropZone';
+import CategoryFormContainer from '../containers/category/CategoryFormContainer';
+import PaintingDropZone from './pages/painting/PaintingDropZone';
 
 class ClientRoutes extends React.Component {
     render() {
@@ -26,14 +24,14 @@ class ClientRoutes extends React.Component {
         return (
             <BrowserRouter>
                 <div>
-                    <Navigation/>
+                    <NavigationContainer/>
                     <div>
                         {/*<Switch>*/}
                         <Route path="/admin" component={ PaintingDropZone }/>
-                        <Route path="/category" component={ PaintingCategoryForm }/>
+                        <Route path="/category" component={ CategoryFormContainer }/>
                         <Route path="/biography" component={ Biography }/>
-                        <Route path="/gallery/:category" component={ PaintingList }/>
-                        <Route exact path="/" component={ Home }/>
+                        <Route path="/gallery/:category" component={ PaintingListContainer }/>
+                        <Route exact path="/" component={ HomeContainer }/>
                         {/*</NSwitch>*/}
                     </div>
                     <Footer/>

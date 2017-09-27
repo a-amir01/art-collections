@@ -5,17 +5,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-import requestAgent from 'superagent';
-
 import DropZone from 'react-dropzone';
-import { Link } from 'react-router-dom';
-import FileReader from 'filereader';
-import { Button } from 'react-bootstrap';
-import FillPaintingForms from "./FillPaintingForms";
 
-// let jsonfile = require('jsonfile');
-
+import PaintingFormListContainer from "../../../containers/painting/PaintingFormListContainer";
 
 // const dropzoneStyle = {
 //     width  : "100%",
@@ -45,8 +37,6 @@ class PaintingDropZone extends React.Component {
     // https://medium.com/ecmastack/uploading-files-with-react-js-and-node-js-e7e6b707f4ef
     onDrop(files) {
         console.log("ONDROP\n\n\n\n");
-
-
         this.setState({ images: this.state.images.concat(files), next: true });
     }
 
@@ -70,8 +60,7 @@ class PaintingDropZone extends React.Component {
                     {/*}*/}
                 </aside>
 
-                {/*<Button bsStyle="primary" bsSize="lg" active onClick={ this.onNext }>Next</Button>*/}
-                { next ? <FillPaintingForms
+                { next ? <PaintingFormListContainer
                             images={images}/>
                        : "" }
             </section>

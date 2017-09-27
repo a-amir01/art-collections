@@ -96,25 +96,5 @@ router.route('/category/:_id')
     //     });
     // }
 
-const dest = process.env.NODE_ENV !== 'production' ? './client/public/uploads/' : './client/build/uploads/';
-
-const storage = multer.diskStorage({
-    destination: dest,
-    filename(req, file, callBack) {
-        const name = (file.originalname).replace(/ /g, "");
-        callBack(null, name);
-    },
-});
-
-const upload = multer({ storage });
-router.route('/file')
-    .post(upload.single('file'), (req, res, next) => {
-        //res.json(req.file);
-        console.log("good\n\n");
-       //file is already of disk
-    });
-
-
-
 module.exports = router;
 

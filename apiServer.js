@@ -41,9 +41,11 @@ const sess = {
 app.use(session(sess));
 
 const index = require('./routes/index');
+const fileUpload = require('./routes/fileUpload');
 // const users = require('./routes/users');
 
 app.use('/api', index);
+app.use('/file', fileUpload);
 // app.use('/users', users);
 
 /*If you have your node.js behind a proxy and are using secure: true,
