@@ -5,25 +5,26 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 
-import CategoryItemContainer from '../../../containers/category/CategoryItemContainer';
+import CategoryItem from '../../../components/pages/category/CategoryItem';
 
-function generateCategories(categories) {
+function generateCategories(categories, click) {
     return (
         categories.map(({ category, _id }) => {
-            return <CategoryItemContainer
+            return <CategoryItem
                 key= { _id }
                 label={ category }
                 _id={ _id }
+                click={ click }
             />
         })
     );
 }
 
-export default function CategoryList({ categories }) {
+export default function CategoryList({ categories, click }) {
     return (
         //<h1>CategoryList</h1>
         <ListGroup componentClass="ul">
-            { generateCategories(categories) }
+            { generateCategories(categories, click) }
         </ListGroup>
     );
 

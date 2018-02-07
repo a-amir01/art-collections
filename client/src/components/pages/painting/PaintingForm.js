@@ -6,10 +6,11 @@
  * how to have multiple forms in one page
  * https://stackoverflow.com/questions/37456526/how-to-embed-the-same-redux-form-multiple-times-on-a-page/37464048#37464048
  * https://github.com/erikras/redux-form/issues/190
+ * // https://github.com/erikras/redux-form/issues/2082
  */
 
 import React from 'react';
-import request from 'superagent';
+import axios from 'axios';
 
 import _ from 'lodash';
 import DropdownList from 'react-widgets/lib/DropdownList';
@@ -65,12 +66,26 @@ class PaintingForm extends React.Component {
         super(props);
         this.getComponentForField = this.getComponentForField.bind(this);
         this.renderMultiselect = this.renderMultiselect.bind(this);
-        this.submit = this.submit.bind(this);
+        this.submitForm = this.submitForm.bind(this);
         this.writeFileToDisk = this.writeFileToDisk.bind(this);
         this.state = {
             imgWritten: false,
         };
     }
+
+    // componentDidMount() {
+    //     alert("mount in paintingForm");
+    // }
+    //
+    // componentWillUnmount() {
+    //     alert("unmounting");
+    // }
+    //
+    // shouldComponentUpdate() {
+    //     alert("should update");
+    //     return false;
+    //
+    // }
 
     renderMultiselect(field) {
         const { meta: { touched, error }, input } = field;
@@ -120,54 +135,44 @@ class PaintingForm extends React.Component {
 
     }
 
-    submit(values) {
-        console.log("VALUES: ", values);
-        const formID = values.title;
-        //addImageToForm
-        //"./uploads is from root of eli-collections/upload
 
-        if(!this.state.imgWritten) {
+// https://github.com/erikras/redux-form/issues/190
+    submitForm(values) {
+        return new Promise(async (resolve, reject) => {
+
+            const { _id, saveForm } = this.props;
+
+            //"./uploads is from root of eli-collections/upload
             values["image"] = "/uploads/" + _.replace(this.props.imgFile.name, / /g, '');
-            this.writeFileToDisk(this.props.imgFile);
-            this.setState({imgWritten: true});
-        }
-        this.props.onSave(values, formID);
-        alert("Save Success");
+            //TODO: handle rejected promise
+            await this.writeFileToDisk(this.props.imgFile);
+
+            values._id = _id;
+            //TODO: handle rejected promise
+            await saveForm(values);
+            resolve("success");
+        });
     }
 
     writeFileToDisk(file){
-        const formDataImg = new FormData();
-        console.log(file);
-        formDataImg.append('file', file);
-
-        const req = request
-            .post('/file')
-            .send(formDataImg);
-
-        req.end(function(err,response){
-            if (err) {
-                console.log(err);
-            }
-
-           console.log("upload done!!!!!");
+        return new Promise((accept, rej) => {
+            const formDataImg = new FormData();
+            console.log(file);
+            formDataImg.append('file', file);
+            axios.post("/file", formDataImg, {'accept': 'application/json', 'Content-Type' : 'multipart/form-data'})
+                .then((res) => {
+                    accept("successul");
+                    console.log('success', res);
+                })
+                .catch((err) => {
+                    rej(err);
+                    alert(err);
+                    console.log(err);
+                });
         });
-        // axios.post("/api/file", formDataImg, {'accept': 'application/json', 'Content-Type' : 'multipart/form-data'})
-        //     .then((res) => {
-        //         alert("success");
-        //         console.log('success', res);
-        //     })
-        //     .catch((err) => {
-        //         alert(err);
-        //         console.log(err);
-        //     });
     }
-// <form onSubmit={ (e) => {
-//     e.preventDefault();
-//     // e.stopPropagation();
-//     handleSubmit(this.submit);
-// }}>
 
-    render(){
+     render(){
         const { imgFile, form } = this.props;
 
         console.log("form: ", form);
@@ -178,7 +183,8 @@ class PaintingForm extends React.Component {
                     <Col xs={12} sm={8}>
                         <GenericForm
                             form={ form }
-                            onSubmit={ this.submit }
+                            submitForm={ this.submitForm }
+                            // onSubmit={ this.submit }
                             componentForField={ this.getComponentForField }
                             fields={ FIELDS }
                             imgFile={ imgFile }

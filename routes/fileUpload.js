@@ -10,7 +10,7 @@ const dest = process.env.NODE_ENV !== 'production' ? './client/public/uploads/' 
 
 const storage = multer.diskStorage({
     destination: dest,
-    filename(req, file, callBack) {
+    filename: function (req, file, callBack) {
         const name = (file.originalname).replace(/ /g, "");
         callBack(null, name);
     },
@@ -32,12 +32,12 @@ function fileFilter(req, file, cb){
     cb(null, true);
 }
 
-const upload = multer({ storage, fileFilter });
+const upload = multer({ storage: storage });
 
 router.route('/')
     .post(upload.single('file'), (req, res, next) => {
         //res.json(req.file);
-        console.log("good\n\n");
+        console.log("POSTING!!!\n\n");
         //file is already of disk
         res.send("uploaded");
     });

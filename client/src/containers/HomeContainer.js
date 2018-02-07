@@ -2,10 +2,6 @@
  * Created by amirassad on 9/26/17.
  */
 
-/**
- * Created by amirassad on 7/27/17.
- */
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

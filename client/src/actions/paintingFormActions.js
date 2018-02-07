@@ -5,39 +5,30 @@
 import axios from 'axios';
 import _ from 'lodash';
 
-export function saveForm(formValues, formID) {
-    console.log("saveForm \n", formValues, formID);
+export function addForms(forms) {
     return {
-        type: "SAVE_FORM",
-        formName: formID,
-        payload: formValues
+        type: "ADD_FORMS",
+        payload: forms
     }
 }
 
-export function submitForms(forms) {
-    console.log("IN FORMACTION: ", forms);
-    _.forOwn(forms, (v, k) => {
-        console.log(v, k, "\n\n\n\n\n\n\n");
+export function saveForm(form) {
+    return async function (dispatch) {
+        console.log("saveForm action \n", form);
+        try {
+            const res = await axios.post("/api/gallery", form);
+            console.log("RESPONSE SUBMIT FORM", res);
 
-        _.mapValues(v, (form) => {
-            submitForm(form);
-        });
-    });
+        }catch(e) {
+            //TODO : throw exception
+            alert(e);
+        }
 
-    return {
-        type: "SUBMIT_FORMS"
+        dispatch({
+            type: "SAVE_FORM",
+            payload: form
+        })
+
     };
 }
 
-function submitForm(form) {
-    console.log("IN submitForm: ", form);
-    axios.post("/api/gallery", form)
-        .then((response)=>{
-            console.log("RESPONSE SUBMIT FORM", response);
-            // dispatch({type:"POST_BOOK", payload: response.data})
-        })
-        .catch((err)=>{
-            alert(err);
-            //dispatch({type: "POST_FORM_REJECTED", payload: "there was an error while posting a new book"})
-        });
-}

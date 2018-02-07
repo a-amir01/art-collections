@@ -12,13 +12,8 @@ import 'react-widgets/dist/css/react-widgets.css';
 export function renderField(field) {
 
     const { meta: { touched, error }, fieldConfig, label, input, type  } = field;
-    console.log("IN renderField input ", field.input);
-    console.log("IN renderField label", typeof field.label);
-    console.log("IN renderField type", typeof fieldConfig.type);
-    console.log("IN renderField inputType", typeof fieldConfig.inputType);
-    console.log("IN renderField error", typeof error);
 
-    const className = `form-group ${ touched && error ? 'has-danger': ''}`;
+    const className = `form-group ${ touched && error ? 'has-danger': '' }`;
 
     return (
 
@@ -28,13 +23,13 @@ export function renderField(field) {
             </label>
 
             <div>
-                <fieldConfig.inputType className="form-control" {...input} placeholder={ label } />
+                <fieldConfig.inputType className="form-control" { ...input } placeholder={ label } />
 
                 { touched &&
                 (error &&
                     <span className="text-help">
-                                {error}
-                            </span>
+                        {error}
+                    </span>
                 )
                 }
             </div>
@@ -46,21 +41,16 @@ class GenericForm extends React.Component {
 
     constructor(props) {
         super(props);
-        // this.onSubmit = this.onSubmit.bind(this);
     }
-
-    // onSubmit() {
-    //     this.props.submit();
-    // }
 
     render() {
         const { handleSubmit, imgFile, submitButtonName, fields,
-                componentForField, pristine, reset, submitting } = this.props;
+                componentForField, pristine, reset, submitting, submitForm } = this.props;
 
         return (
 
             <Panel>
-                <form onSubmit={ handleSubmit }>
+                <form onSubmit={ handleSubmit(data => submitForm(data)) }>
                     {
                         _.map(fields, (fieldConfig, field) => {
                             return ( <Field
@@ -103,6 +93,7 @@ class GenericForm extends React.Component {
 }
 
 export default reduxForm({
-
+    // https://redux-form.com/7.2.3/docs/api/reduxform.md/#-getformstate-function-optional-
 })(GenericForm);
+
 

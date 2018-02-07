@@ -15,8 +15,15 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 50
 app.use(cookieParser());
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://demouser:demo@ds139964.mlab.com:39964/eli-collections');
-// mongoose.connect('mongodb://localhost:27017/art-collection');
+
+// if(process.env.NODE_ENV === 'test') {
+    console.log(process.env.NODE_ENV);
+    console.log("YESSSSSSS");
+    mongoose.connect('mongodb://localhost:27017/art-collection');
+// }
+// }else{
+//     mongoose.connect('mongodb://demouser:demo@ds139964.mlab.com:39964/eli-collections');
+// }
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDb - connection error: '));
@@ -41,6 +48,7 @@ const sess = {
 app.use(session(sess));
 
 const index = require('./routes/index');
+// const gallery = require('./routes)
 const fileUpload = require('./routes/fileUpload');
 // const users = require('./routes/users');
 

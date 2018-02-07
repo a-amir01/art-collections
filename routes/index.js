@@ -23,22 +23,33 @@ router.route('/gallery')
         Painting.create(painting, (err, paintings)=>{
             if(err)
                 throw err;
+            console.log("FUCKK");
             res.json(paintings);
         });
     });
+// /*TODO*/
+// router.route('/gallery/category/:title')
+//     .get((req, res, next) => {
+//         console.log("/api/gallery/:category\n", req.params.title);
+//         const body = {
+//             category: req.params.category,
+//         };
+//
+//         Painting.find(body, (err, paintings) => {
+//             if(err)
+//                 throw err;
+//             res.json(paintings)
+//         })
+//     });
 
-router.route('/gallery/:category')
+router.route('/gallery/:_id')
     .get((req, res, next) => {
-        console.log("/api/gallery/:category\n", req.params.category);
-        const body = {
-            category: req.params.category,
-        };
-
-        Painting.find(body, (err, paintings) => {
+        console.log("GALLERY\n\n\n");
+        Painting.find({ category: req.params._id }, (err, painting) => {
             if(err)
-                throw err;
-            res.json(paintings)
-        })
+                res.send(err);
+            res.json(painting);
+        });
     });
 
 router.route('/category')

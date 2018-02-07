@@ -6,6 +6,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import { removeCategory } from '../../actions/categoryActions';
 import { getAllCategories } from '../../actions/categoryActions';
 
 import CategoryList from '../../components/pages/category/CategoryList';
@@ -14,6 +15,11 @@ class CategoryListContainer extends React.Component {
 
     constructor(props) {
         super(props);
+        this.deleteCategory = this.deleteCategory.bind(this);
+    }
+
+    deleteCategory(_id) {
+        this.props.removeCategory(_id);
     }
 
     render() {
@@ -22,6 +28,7 @@ class CategoryListContainer extends React.Component {
         return (
             <CategoryList
                 categories={ categories }
+                click={ this.deleteCategory }
             />
         );
     }
@@ -34,7 +41,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ }, dispatch);
+    return bindActionCreators({ removeCategory }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryListContainer);

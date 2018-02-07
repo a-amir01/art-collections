@@ -66,10 +66,3 @@ export function updatePainting(painting) {
 //             })
 //     }
 // }
-
-export function resetButton(){
-    console.log("paintingActions: resetButton");
-    return {
-        type: "RESET_BUTTON",
-    }
-}
