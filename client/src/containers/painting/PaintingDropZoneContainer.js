@@ -3,32 +3,38 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import PaintingDropZone  from '../../components/pages/painting/PaintingDropZone';
-import { addForms } from '../../actions/paintingFormActions';
+import { dispatchNewForms } from '../../actions/paintingFormActions';
 
 class PaintingDropZoneContainer extends React.Component {
+    static propTypes = {
+        currentForms: PropTypes.array.isRequired,
+        dispatchNewForms: PropTypes.func.isRequired,
+    };
+
     render() {
-        const { addForms, currentForms } = this.props;
+        const { dispatchNewForms, currentForms } = this.props;
         return (
             <PaintingDropZone
-                addForms={ addForms }
+                dispatchNewForms={ dispatchNewForms }
                 currentForms={ currentForms }
             />
         )
     }
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
         currentForms: state.paintingFormReducer.currentForms,
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ addForms }, dispatch);
+    return bindActionCreators({ dispatchNewForms }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PaintingDropZoneContainer);

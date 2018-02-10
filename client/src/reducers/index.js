@@ -5,7 +5,7 @@
 import { combineReducers } from 'redux'
 import { reducer as formReducer } from 'redux-form';
 
-import { paintingReducers } from './paintingReducers';
+import { paintingReducer } from './paintingReducer';
 import { paintingFormReducer } from './paintingFormReducer';
 import { categoryReducer } from './categoryReducer';
 
@@ -14,11 +14,10 @@ import { categoryReducer } from './categoryReducer';
  *an Immutable object, or anything else. You'll probably want a (de)serialization
  *mechanism for writing universal apps and hydrating their state from the server,
  *but other than that, you can use any data storage library as long as it supports immutability. */
+
 export default combineReducers({
-    paintingReducers,
+    paintingReducer,
     paintingFormReducer,
     categoryReducer,
     form : formReducer,
-
 });
-

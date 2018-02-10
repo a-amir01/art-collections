@@ -3,42 +3,46 @@
  */
 
 import React from 'react';
-import { Grid, Col, Row, Button } from 'react-bootstrap';
-
+import PropTypes from 'prop-types';
 import Painting from './Painting';
 
 // https://masonry.desandro.com/
 
-function generateElements(paintings) {
+function generateElements(paintings, categories, category, dispatchUpdatePainting) {
 
     return paintings.map(painting=>{
         console.log("PaintingList: Generating paintings\n");
         return (
-            <Col xs={12} sm={6} md={4} key={ painting._id }>
+            <div key={ painting._id }>
                 <Painting
-                    _id={painting._id}
-                    title={painting.title}
-                    description={painting.description}
-                    image={painting.image}
+                    painting={ painting }
+                    dispatchUpdatePainting={ dispatchUpdatePainting }
+                    category={ category }
+                    categories={ categories }
                 />
-            </Col>
+            </div>
         )
     });
 }
 
-function PaintingList ({ paintings, category }) {
+function PaintingList ({ paintings, categories, category, dispatchUpdatePainting }) {
         console.log("PaintingList: render\n");
 
-        const paintingList = generateElements(paintings);
+        const paintingList = generateElements(paintings, categories, category, dispatchUpdatePainting);
 
         return (
-            <Grid>
+            <div>
                 <h1>{ category }</h1>
-                <Row style={{margineTop: '15px'}}>
-                    {paintingList}
-                </Row>
-            </Grid>
+                { paintingList }
+            </div>
         );
 }
 
 export default PaintingList;
+
+PaintingList.propTypes = {
+    paintings: PropTypes.array.isRequired,
+    categories: PropTypes.array.isRequired,
+    category: PropTypes.string.isRequired,
+    dispatchUpdatePainting: PropTypes.func.isRequired,
+};

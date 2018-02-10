@@ -3,10 +3,9 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import { MenuItem, InputGroup, DropdownButton,
-    Image, Col, Row, Well, Panel, FormControl,
-    FormGroup, ControlLabel, Button} from 'react-bootstrap';
+import { Col, Row, Well } from 'react-bootstrap';
 
 import GenericForm, { renderField } from '../../utils/GenericForm';
 import CategoryListContainer from '../../../containers/category/CategoryListContainer';
@@ -28,6 +27,10 @@ const FIELDS = {
 };
 
 class CategoryForm extends React.Component {
+    static propTypes = {
+        form: PropTypes.string.isRequired,
+        dispatchAddCategory: PropTypes.func.isRequired,
+    };
 
     constructor(props) {
         super(props);
@@ -36,22 +39,19 @@ class CategoryForm extends React.Component {
     }
 
     getComponentForField(field) {
-        console.log("getComponentForField " , field.fieldConfig.fieldName);
-
         const { fieldConfig, } = field;
         const { category } = FIELDS;
 
         switch (fieldConfig.fieldName){
             case category.fieldName:
-                console.log("getComponentForField FIELDS.category.fieldName");
                 return renderField(field);
         }
     }
 
     submit(values) {
-        console.log("VALUES: ", values);
+        const { dispatchAddCategory } = this.props;
         values.category = values.category.replace(/ /g, "");
-        this.props.onSave(values);
+        dispatchAddCategory(values);
 
         //addImageToForm
         //"./uploads is from root of eli-collections/upload
@@ -65,7 +65,7 @@ class CategoryForm extends React.Component {
                     <Col xs={12} sm={6}>
                         <GenericForm
                             form={ form }
-                            onSubmit={ this.submit }
+                            submitForm={ this.submit }
                             componentForField={ this.getComponentForField }
                             fields={ FIELDS }
                             submitButtonName="Save"

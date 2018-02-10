@@ -4,65 +4,54 @@
 
 import axios from 'axios';
 
-export function getPaintings() {
-    console.log("paintingActions: getPaintings");
-    return (dispatch) => {
-        axios.get("/api/gallery")
-            .then(res => {
-                console.log("paintingActions::getPaintings: Got Paintings" , res.data);
-                dispatch({type: "GET_PAINTINGS", payload: res.data})
-            })
-            .catch(err => {
-                console.log("paintingActions: DIDNT Got Paintings");
-                dispatch({type: "GET_PAINTINGS_REJECTED", payload: err})
-            })
+export function dispatchGetPaintings() {
+    return async (dispatch) => {
+        let response;
+        try {
+            response = await axios.get("/api/gallery");
+            dispatch({ type: "GET_PAINTINGS", payload: response.data });
+
+        }catch(e) {
+            throw e;
+        }
     };
 }
 
-export function getPaintingsByCategory(category) {
-    console.log("paintingActions::getPaintingsByCategory\nCategory: ", category);
-    return (dispatch) => {
-        axios.get("/api/gallery/" + category)
-            .then(res => {
-                console.log("paintingActions::getPaintingsByCategory Got Paintings ", res.data);
-                dispatch({type: "GET_PAINTINGS", payload: res.data})
-            })
-            .catch(err => {
-                console.log("paintingActions::getPaintingsByCategory DIDNT Got Paintings");
-                dispatch({type: "GET_PAINTINGS", payload: err})
-            })
+export function dispatchGetPaintingsByCategory(category) {
+    return async (dispatch) => {
+        let response;
+        try{
+            response = await axios.get("/api/gallery/" + category);
+            dispatch({ type: "GET_PAINTINGS", payload: response.data });
+
+        }catch(e) {
+            throw e;
+        }
     };
 }
 
-export function deletePainting(id) {
-    console.log("paintingActions: deletePainting");
-    return (dispatch) => {
-        axios.delete("/api/gallery/" + id)
-            .then(res=>{
-                dispatch({type:"DELETE_PAINTING", payload: id})
-            })
-            .catch(err=>{
-                dispatch({type: "DELETE_PAINTING_REJECTED", payload: err})
-            })
-    }
+export function dispatchUpdatePainting(painting) {
+    return async (dispatch) => {
+        let response;
+        try {
+            response = await axios.put("/api/painting/" + painting._id, painting);
+            dispatch({ type: "UPDATE_PAINTING", payload: response.data });
+
+        }catch(e) {
+            throw e;
+        }
+    };
 }
 
-export function updatePainting(painting) {
-    return {
-        type: "UPDATE_PAINTING",
-        payload: painting
+export function dispatchDeletePainting(id) {
+    return async (dispatch) => {
+        let response;
+        try {
+            response = await axios.delete("/api/gallery/" + id);
+            dispatch({ type:"DELETE_PAINTING", payload: id });
+
+        }catch(e) {
+            throw e;
+        }
     }
 }
-
-// export function deletePainting(id) {
-//     console.log("paintingActions: deletePainting");
-//     return (dispatch) => {
-//         axios.delete("api/paintings/" + id)
-//             .then(res=>{
-//                 dispatch({type:"DELETE_PAINTING", payload: id})
-//             })
-//             .catch(err=>{
-//                 dispatch({type: "DELETE_PAINTING_REJECTED", payload: err})
-//             })
-//     }
-// }

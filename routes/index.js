@@ -42,10 +42,45 @@ router.route('/gallery')
 //         })
 //     });
 
-router.route('/gallery/:_id')
+router.route('/painting/:_id')
+    .put((req, res) => {
+        const painting = req.body;
+        const paintingId = req.params._id;
+        console.log(JSON.stringify(painting));
+        console.log(paintingId);
+
+        const update = {
+            '$set': painting
+        };
+
+        Painting.findByIdAndUpdate(paintingId, update, { new : true }, (err, painting) => {
+            if(err) {
+                console.log("THROWING ERROR\n\n");
+                res.json(err);
+            }
+
+            res.json(painting);
+        });
+
+    })
+    .delete((req, res) => {
+        const query = {
+            _id: req.params._id
+        };
+
+        Painting.remove(query, (err, painting) => {
+            if(err)
+                res.json(err);
+
+            res.json(painting);
+        });
+
+    });
+
+router.route('/gallery/:_category')
     .get((req, res, next) => {
         console.log("GALLERY\n\n\n");
-        Painting.find({ category: req.params._id }, (err, painting) => {
+        Painting.find({ category: req.params._category }, (err, painting) => {
             if(err)
                 res.send(err);
             res.json(painting);

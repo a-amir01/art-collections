@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 
 import PaintingForm from '../../../components/pages/painting/PaintingForm';
@@ -13,14 +14,12 @@ import PaintingForm from '../../../components/pages/painting/PaintingForm';
  * https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0
  */
 
-export default function PaintingFormList({ images, click, categories, saveForm }) {
-    console.log(images);
+export default function PaintingFormList({ currentForms, categories, dispatchSaveForm }) {
+    console.log(currentForms);
     return (
         <div>
-            {/*<h1>FillPaintingForms</h1>*/}
             {
-                images.map(( { _id, file } ) => {
-                    console.log(_id);
+                currentForms.map(( { _id, file } ) => {
                     return (
                         <div key={ _id }>
                             {/*<img src={ file.preview } key={file.name}/>{file.name}*/}
@@ -29,7 +28,7 @@ export default function PaintingFormList({ images, click, categories, saveForm }
                                 form={ `${_.split(file.name, '.')[0]}-${_id}` }
                                 imgFile={ file }
                                 categories= { categories }
-                                saveForm={ saveForm }
+                                dispatchSaveForm={ dispatchSaveForm }
                             />
                         </div>
                     )
@@ -41,4 +40,12 @@ export default function PaintingFormList({ images, click, categories, saveForm }
         </div>
     );
 }
+
+PaintingFormList.propTypes = {
+    currentForms: PropTypes.array.isRequired,
+    categories: PropTypes.array.isRequired,
+    dispatchSaveForm: PropTypes.func.isRequired,
+};
+
+
 

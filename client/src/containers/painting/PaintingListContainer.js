@@ -7,42 +7,54 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Grid, Col, Row, Button } from 'react-bootstrap';
-import { getPaintingsByCategory } from "../../actions/paintingActions";
-//import Painting from './Painting';
+
+import { dispatchGetPaintingsByCategory, dispatchUpdatePainting } from "../../actions/paintingActions";
+
 import PaintingList from '../../components/pages/painting/PaintingList';
 
 // https://masonry.desandro.com/
 
 class PaintingListContainer extends React.Component {
-    componentDidMount(){
-        console.log("PaintingListContainer: componentDidMount\n");
-        this.props.getPaintingsByCategory(this.props.match.params.category);
+    static propTypes = {
+        paintings: PropTypes.array.isRequired,
+        categories: PropTypes.array.isRequired,
+        dispatchGetPaintingsByCategory: PropTypes.func.isRequired,
+        dispatchUpdatePainting: PropTypes.func.isRequired,
+    };
+
+    componentDidMount() {
+        const { dispatchGetPaintingsByCategory, match: { params} } = this.props;
+        dispatchGetPaintingsByCategory(params.category);
     }
-    render(){
-        const { paintings } = this.props;
-        const category = this.props.match.params.category;
+
+    render() {
+        console.log("render in PaintingListContainer");
+        const { paintings, categories, match: { params}, dispatchUpdatePainting } = this.props;
+        const category = params.category;
+
         return (
             <PaintingList
                 paintings={ paintings }
                 category={ category }
+                categories={ categories }
+                dispatchUpdatePainting={ dispatchUpdatePainting }
             />
         );
     }
 }
 
-function mapStateToProps(state){
-    console.log("PaintingListContainer: mapStateToProps\n", state);
+function mapStateToProps(state) {
     return {
-        paintings: state.paintingReducers.paintings,
+        paintings: state.paintingReducer.paintings,
+        categories: state.categoryReducer.categories,
     }
 }
 
-function mapDispatchToProps(dispatch){
-    console.log("PaintingListContainer: mapDispatchToProps\n");
-    return bindActionCreators({ getPaintingsByCategory }, dispatch);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ dispatchGetPaintingsByCategory, dispatchUpdatePainting }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(PaintingListContainer);

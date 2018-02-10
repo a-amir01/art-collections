@@ -4,7 +4,7 @@
 
 import React from 'react';
 
-import { Grid, Row, Col, Button } from 'react-bootstrap';
+import { Grid, Row } from 'react-bootstrap';
 import { Carousel } from 'react-responsive-carousel';
 
 // function getCarouselPaintings(){

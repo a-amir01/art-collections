@@ -3,12 +3,17 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import DropZone from 'react-dropzone';
 
 import PaintingFormListContainer from "../../../containers/painting/PaintingFormListContainer";
 const uuidv4 = require('uuid/v4');
 
 class PaintingDropZone extends React.Component {
+    static propTypes = {
+        dispatchNewForms: PropTypes.func.isRequired,
+    };
+
     constructor(props) {
         super(props);
         this.onDrop = this.onDrop.bind(this);
@@ -17,9 +22,9 @@ class PaintingDropZone extends React.Component {
     //https://stackoverflow.com/questions/39663961/how-do-you-send-images-to-node-js-with-axios
     // https://medium.com/ecmastack/uploading-files-with-react-js-and-node-js-e7e6b707f4ef
     onDrop(files) {
-        const { addForms } = this.props;
+        const { dispatchNewForms } = this.props;
         files = files.map(file => { return { "_id": uuidv4(), "file": file } });
-        addForms(files);
+        dispatchNewForms(files);
     }
 
     render() {

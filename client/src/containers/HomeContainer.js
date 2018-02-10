@@ -3,13 +3,18 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { getPaintings } from "../actions/paintingActions";
+import { dispatchGetPaintings } from "../actions/paintingActions";
 import Home from '../components/pages/Home';
 
 class HomeContainer extends React.Component {
+    static propTypes = {
+        paintings: PropTypes.array.isRequired,
+        dispatchGetPaintings: PropTypes.func.isRequired,
+    };
 
     render () {
         const { paintings } = this.props;
@@ -23,12 +28,12 @@ class HomeContainer extends React.Component {
 
 function mapStateToProps(state){
     return {
-        paintings: state.paintingReducers.paintings,
+        paintings: state.paintingReducer.paintings,
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({getPaintings}, dispatch);
+    return bindActionCreators({ dispatchGetPaintings }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeContainer);

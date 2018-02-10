@@ -6,7 +6,6 @@ import _ from "lodash";
 
 const initState = {
     currentForms: [],
-    savedForms: [],
 };
 
 export function paintingFormReducer(state=initState, action){
@@ -15,15 +14,14 @@ export function paintingFormReducer(state=initState, action){
     switch(action.type){
         case "ADD_FORMS":
             return { ...state, currentForms: _.concat(state.currentForms, action.payload) };
-
         case "SAVE_FORM":
             return { ...state, currentForms: _.filter(state.currentForms, (form) => form._id !== action.payload._id) };
         case "UPDATE_FORM":
             return {...state};
-        // break;
         case "DELETE_FORM":
             return {...state};
-
+        default:
+            return state;
     }
-    return state;
+
 }

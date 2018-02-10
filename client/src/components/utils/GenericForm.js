@@ -3,20 +3,18 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
+import { Panel, Button } from 'react-bootstrap';
 import _ from 'lodash';
-import { Col, Row, Well, Panel, Button } from 'react-bootstrap';
 
 import 'react-widgets/dist/css/react-widgets.css';
 
 export function renderField(field) {
-
     const { meta: { touched, error }, fieldConfig, label, input, type  } = field;
-
     const className = `form-group ${ touched && error ? 'has-danger': '' }`;
 
     return (
-
         <div className={className}>
             <label>
                 { label }
@@ -39,16 +37,26 @@ export function renderField(field) {
 
 class GenericForm extends React.Component {
 
-    constructor(props) {
-        super(props);
+    static propTypes = {
+        fields: PropTypes.object.isRequired,
+        submitButtonName: PropTypes.string.isRequired,
+        componentForField: PropTypes.func.isRequired,
+        submitForm: PropTypes.func.isRequired,
+        initialValues: PropTypes.object,
+    };
+
+    componentDidMount() {
+        const { initialize, initialValues } = this.props;
+        if(initialValues) {
+            initialize(initialValues);
+        }
     }
 
     render() {
-        const { handleSubmit, imgFile, submitButtonName, fields,
+        const { handleSubmit, submitButtonName, fields,
                 componentForField, pristine, reset, submitting, submitForm } = this.props;
 
         return (
-
             <Panel>
                 <form onSubmit={ handleSubmit(data => submitForm(data)) }>
                     {
@@ -64,31 +72,22 @@ class GenericForm extends React.Component {
                             />)
                         })
                     }
-                    {
-                        imgFile &&
-                        <div>
-                            <img src={ imgFile.preview } key={ imgFile.name }/>
-                        </div>
-                    }
                     <div id="paintingFormButton">
                         <Button
                             id="saveb"
                             type="submit"
                             bsSize="lg"
-                            disabled={ submitting }
+                            disabled={ pristine || submitting }
                             bsStyle="primary">
                             { submitButtonName }
                         </Button>
-                        <Button type="button" bsSize="lg" bsStyle="warning" disabled={ pristine || submitting } onClick={reset}>
-                            Clear Values
+                        <Button type="button" bsSize="lg" bsStyle="warning" disabled={ pristine || submitting } onClick={ reset }>
+                            Clear
                         </Button>
-
-                        {/*<Button id="saveb" type="submit" bsStyle="primary" bsSize="lg" active>{ submitButtonName }</Button>*/}
                     </div>
                 </form>
             </Panel>
-
-        )
+        );
     }
 }
 

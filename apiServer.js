@@ -10,20 +10,30 @@ const mongoStore = require('connect-mongo')(session);
 const app = express();
 
 app.use(logger('dev'));
-app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000 }));
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(cookieParser());
 
 const mongoose = require('mongoose');
 
-// if(process.env.NODE_ENV === 'test') {
-    console.log(process.env.NODE_ENV);
-    console.log("YESSSSSSS");
-    mongoose.connect('mongodb://localhost:27017/art-collection');
+const options = {
+    useMongoClient: true
+};
+mongoose.Promise = global.Promise;
+
+/*
+ With `useMongoClient`, `mongoose.connect()` returns a thenable
+ http://thecodebarbarian.com/mongoose-4.11-use-mongo-client.html
+ https://github.com/Automattic/mongoose/issues/5399
+ * */
+
+console.log("env", process.env.NODE_ENV);
+// if(process.env.NODE_ENV === 'production') {
+//     mongoose.connect('mongodb://demouser:demo@ds139964.mlab.com:39964/eli-collections', options);
+// }else {
+    mongoose.connect('mongodb://localhost:27017/art-collection', options);
 // }
-// }else{
-//     mongoose.connect('mongodb://demouser:demo@ds139964.mlab.com:39964/eli-collections');
-// }
+
 
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDb - connection error: '));

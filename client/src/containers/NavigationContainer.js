@@ -3,21 +3,28 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import Navigation from '../components/pages/Navigation';
-import { getAllCategories } from '../actions/categoryActions';
+import { dispatchGetCategories } from '../actions/categoryActions';
 
 class NavigationContainer extends React.Component {
 
+    static propTypes = {
+        dispatchGetCategories: PropTypes.func.isRequired,
+        categories: PropTypes.array.isRequired,
+    };
+
     componentDidMount() {
-        this.props.getAllCategories();
+        const { dispatchGetCategories } = this.props;
+        dispatchGetCategories();
     }
 
-    render(){
-        const { categories } = this.props;
+    render() {
         console.log("Render in Navigation.js");
+        const { categories } = this.props;
         return(
             <Navigation
                 categories={ categories }
@@ -27,15 +34,14 @@ class NavigationContainer extends React.Component {
 }
 
 function mapStateToProps(state){
-    console.log("Navigation: mapStateToProps\n", state);
     return {
         categories: state.categoryReducer.categories,
     }
 }
 
 function mapDispatchToProps(dispatch){
-    console.log("Navigation: mapDispatchToProps\n");
-    return bindActionCreators({ getAllCategories }, dispatch);
+    return bindActionCreators({ dispatchGetCategories }, dispatch);
+
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavigationContainer);

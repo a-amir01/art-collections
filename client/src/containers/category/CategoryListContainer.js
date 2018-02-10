@@ -3,15 +3,20 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { removeCategory } from '../../actions/categoryActions';
-import { getAllCategories } from '../../actions/categoryActions';
+import { dispatchRemoveCategory } from '../../actions/categoryActions';
 
 import CategoryList from '../../components/pages/category/CategoryList';
 
 class CategoryListContainer extends React.Component {
+
+    static propTypes = {
+        categories: PropTypes.array.isRequired,
+        dispatchRemoveCategory: PropTypes.func.isRequired,
+    };
 
     constructor(props) {
         super(props);
@@ -19,7 +24,8 @@ class CategoryListContainer extends React.Component {
     }
 
     deleteCategory(_id) {
-        this.props.removeCategory(_id);
+        const { dispatchRemoveCategory } = this.props;
+        dispatchRemoveCategory(_id);
     }
 
     render() {
@@ -28,7 +34,7 @@ class CategoryListContainer extends React.Component {
         return (
             <CategoryList
                 categories={ categories }
-                click={ this.deleteCategory }
+                deleteCategory={ this.deleteCategory }
             />
         );
     }
@@ -41,7 +47,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ removeCategory }, dispatch);
+    return bindActionCreators({ dispatchRemoveCategory }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryListContainer);

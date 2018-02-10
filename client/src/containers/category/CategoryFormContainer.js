@@ -3,22 +3,23 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { addCategory } from '../../actions/categoryActions';
+
+import { dispatchAddCategory } from '../../actions/categoryActions';
 import CategoryForm from '../../components/pages/category/CategoryForm';
 
 class CategoryFormContainer extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
+    static propTypes = {
+        dispatchAddCategory: PropTypes.func.isRequired,
+    };
 
     render() {
-        const { addCategory } = this.props;
+        const { dispatchAddCategory } = this.props;
         return (
             <CategoryForm
-                onSave={ addCategory }
+                dispatchAddCategory={ dispatchAddCategory }
                 form="CategoryForm"
             />
         )
@@ -26,7 +27,7 @@ class CategoryFormContainer extends React.Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({ addCategory }, dispatch);
+    return bindActionCreators({ dispatchAddCategory }, dispatch);
 }
 
 export default connect(null, mapDispatchToProps)(CategoryFormContainer);

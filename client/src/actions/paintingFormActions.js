@@ -3,21 +3,20 @@
  */
 
 import axios from 'axios';
-import _ from 'lodash';
 
-export function addForms(forms) {
+export function dispatchNewForms(forms) {
     return {
         type: "ADD_FORMS",
         payload: forms
     }
 }
 
-export function saveForm(form) {
+export function dispatchSaveForm(form) {
     return async function (dispatch) {
-        console.log("saveForm action \n", form);
+        let response;
         try {
-            const res = await axios.post("/api/gallery", form);
-            console.log("RESPONSE SUBMIT FORM", res);
+            response = await axios.post("/api/gallery", form);
+            //TODO: log the response
 
         }catch(e) {
             //TODO : throw exception
@@ -27,8 +26,7 @@ export function saveForm(form) {
         dispatch({
             type: "SAVE_FORM",
             payload: form
-        })
-
+        });
     };
 }
 

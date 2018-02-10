@@ -14,7 +14,7 @@ const paintingSchema = mongoose.Schema({
     // style: String,
     category: String,
     description: String,
-    _id: { type: String, default: uuid.v4 }
+    _id: { type: String, default: uuid.v4 },
     // tags: [ String ],
     // price: Number,
     // created: Number,

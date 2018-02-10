@@ -4,7 +4,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import NavigationContainer from '../containers/NavigationContainer';
 import Footer from './pages/Footer';
 import PaintingListContainer from '../containers/painting/PaintingListContainer';

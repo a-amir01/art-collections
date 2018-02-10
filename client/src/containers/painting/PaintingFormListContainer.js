@@ -3,39 +3,40 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
-import { saveForm } from '../../actions/paintingFormActions';
+import { dispatchSaveForm } from '../../actions/paintingFormActions';
 import PaintingFormList from '../../components/pages/painting/PaintingFormList';
 
 class PaintingFormListContainer extends React.Component {
-
-    constructor(props) {
-        super(props);
-    }
+    static propTypes = {
+        categories: PropTypes.array.isRequired,
+        currentForms: PropTypes.array.isRequired,
+        dispatchSaveForm: PropTypes.func.isRequired,
+    };
 
     render() {
-
-        const { categories, newForms, saveForm } = this.props;
+        const { categories, currentForms, dispatchSaveForm } = this.props;
 
         return (
             <PaintingFormList
-                images={ newForms }
+                currentForms={ currentForms }
                 categories={ categories }
-                saveForm={ saveForm }
+                dispatchSaveForm={ dispatchSaveForm }
             />
         );
     }
 }
 
-function mapDispatchToProps(dispatch){
-    return bindActionCreators({ saveForm }, dispatch);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({ dispatchSaveForm }, dispatch);
 }
 
-function mapStateToProps(state){
+function mapStateToProps(state) {
     return {
-        newForms: state.paintingFormReducer.currentForms,
+        currentForms: state.paintingFormReducer.currentForms,
         categories: state.categoryReducer.categories,
     }
 }

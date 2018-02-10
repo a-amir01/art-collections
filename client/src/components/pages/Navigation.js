@@ -3,6 +3,7 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { Nav, NavItem, NavDropdown, MenuItem } from 'react-bootstrap';
 
@@ -15,7 +16,6 @@ function generateGalleryMenu(categories) {
         item += INCREMENT;
         const eveKey = parseFloat(item).toFixed(1);
         const path = "/gallery/" + category;
-        console.log("PaintingList: Generating category\n", eveKey, category);
 
         return (
             <MenuItem
@@ -26,12 +26,10 @@ function generateGalleryMenu(categories) {
             </MenuItem>
         )
     });
-
 }
 
 export default function Navigation({ categories }) {
-    // onSelect={this.handleSelect}
-    console.log("Render in Navigation.js");
+    console.log("Render in component-Navigation.js");
     return(
         <Nav bsStyle="tabs" activeKey="1" >
             <NavItem eventKey="1" href="/">Home</NavItem>
@@ -48,5 +46,9 @@ export default function Navigation({ categories }) {
     );
 
 }
+
+Navigation.propTypes = {
+    categories: PropTypes.array.isRequired,
+};
 
 

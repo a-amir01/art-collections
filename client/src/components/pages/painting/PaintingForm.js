@@ -10,14 +10,13 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
-
 import _ from 'lodash';
 import DropdownList from 'react-widgets/lib/DropdownList';
-import { Col, Row, Well, Panel, Button } from 'react-bootstrap';
+import { Col, Row, Well, Image } from 'react-bootstrap';
 
 import GenericForm, { renderField } from '../../utils/GenericForm';
-
 
 /*
 * Must be passed an onSave call back which takes in the form as jason and the form name
@@ -59,8 +58,18 @@ const FIELDS = {
     },
 };
 
-
 class PaintingForm extends React.Component {
+    static propTypes = {
+        form: PropTypes.string.isRequired,
+        _id: PropTypes.string.isRequired,
+        imgFile: PropTypes.oneOfType([ PropTypes.string, PropTypes.object ]),
+        categories: PropTypes.array.isRequired,
+        initialValues: PropTypes.object,
+        shouldUpdateForm: PropTypes.bool,
+        updateForm: PropTypes.func,
+        dispatchSaveForm: PropTypes.func,
+
+    };
 
     constructor(props) {
         super(props);
@@ -68,9 +77,6 @@ class PaintingForm extends React.Component {
         this.renderMultiselect = this.renderMultiselect.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.writeFileToDisk = this.writeFileToDisk.bind(this);
-        this.state = {
-            imgWritten: false,
-        };
     }
 
     // componentDidMount() {
@@ -86,15 +92,10 @@ class PaintingForm extends React.Component {
     //     return false;
     //
     // }
-
     renderMultiselect(field) {
         const { meta: { touched, error }, input } = field;
         const className = `form-group ${touched && error ? 'has-danger': ''}`;
-        console.log("CATEGORIES:\n" , this.props.categories);
         const categoryLabels = this.props.categories.map(({ category }) => category);
-        console.log("CATEGORIES:\n" , categoryLabels);
-
-
         return (
             <div className={className}>
                 <label>
@@ -135,61 +136,68 @@ class PaintingForm extends React.Component {
 
     }
 
-
-// https://github.com/erikras/redux-form/issues/190
+    // https://github.com/erikras/redux-form/issues/190
     submitForm(values) {
         return new Promise(async (resolve, reject) => {
 
-            const { _id, saveForm } = this.props;
+            const { _id, imgFile, dispatchSaveForm } = this.props;
 
             //"./uploads is from root of eli-collections/upload
-            values["image"] = "/uploads/" + _.replace(this.props.imgFile.name, / /g, '');
+            values["image"] = "/uploads/" + _.replace(imgFile.name, / /g, '');
             //TODO: handle rejected promise
-            await this.writeFileToDisk(this.props.imgFile);
+            await this.writeFileToDisk(imgFile);
 
             values._id = _id;
             //TODO: handle rejected promise
-            await saveForm(values);
+            await dispatchSaveForm(values);
             resolve("success");
         });
     }
 
     writeFileToDisk(file){
-        return new Promise((accept, rej) => {
+        return new Promise(async (accept, rej) => {
             const formDataImg = new FormData();
             console.log(file);
             formDataImg.append('file', file);
-            axios.post("/file", formDataImg, {'accept': 'application/json', 'Content-Type' : 'multipart/form-data'})
-                .then((res) => {
-                    accept("successul");
-                    console.log('success', res);
-                })
-                .catch((err) => {
-                    rej(err);
-                    alert(err);
-                    console.log(err);
-                });
+            try {
+                await axios.post("/file", formDataImg, { 'accept': 'application/json', 'Content-Type' : 'multipart/form-data' });
+                accept();
+            }catch(e) {
+                throw e;
+            }
         });
     }
 
      render(){
-        const { imgFile, form } = this.props;
+        const { imgFile, form, shouldUpdateForm, updateForm, initialValues } = this.props;
 
-        console.log("form: ", form);
+        let formSubmitFunction;
+        let image;
+
+        if(shouldUpdateForm) {
+            image = imgFile;
+            formSubmitFunction = updateForm;
+        }else{
+            image = imgFile.preview;
+            formSubmitFunction = this.submitForm;
+        }
 
         return (
             <Well>
                 <Row>
-                    <Col xs={12} sm={8}>
+                    <Col xs={8} sm={6}>
                         <GenericForm
                             form={ form }
-                            submitForm={ this.submitForm }
+                            submitForm={ formSubmitFunction }
                             // onSubmit={ this.submit }
                             componentForField={ this.getComponentForField }
                             fields={ FIELDS }
-                            imgFile={ imgFile }
+                            initialValues={ initialValues }
                             submitButtonName="Save"
                         />
+                    </Col>
+                    <Col xs={10} sm={6}>
+                        <Image src={ image } responsive rounded />
                     </Col>
                 </Row>
             </Well>
