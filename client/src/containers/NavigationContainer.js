@@ -9,6 +9,7 @@ import { bindActionCreators } from 'redux';
 
 import Navigation from '../components/pages/Navigation';
 import { dispatchGetCategories } from '../actions/categoryActions';
+import { dispatchNewPage } from '../actions/pageActions';
 
 class NavigationContainer extends React.Component {
 
@@ -24,10 +25,12 @@ class NavigationContainer extends React.Component {
 
     render() {
         console.log("Render in Navigation.js");
-        const { categories } = this.props;
+        const { categories, currentPage, dispatchNewPage } = this.props;
         return(
             <Navigation
                 categories={ categories }
+                currentPage={ currentPage }
+                dispatchNewPage={ dispatchNewPage }
             />
         );
     }
@@ -36,13 +39,15 @@ class NavigationContainer extends React.Component {
 function mapStateToProps(state){
     return {
         categories: state.categoryReducer.categories,
+        currentPage: state.pageReducer.page,
     }
 }
 
 function mapDispatchToProps(dispatch){
-    return bindActionCreators({ dispatchGetCategories }, dispatch);
+    return bindActionCreators({ dispatchGetCategories, dispatchNewPage }, dispatch);
 
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NavigationContainer);
+//https://github.com/reactjs/react-redux/blob/master/docs/troubleshooting.md
+export default connect(mapStateToProps, mapDispatchToProps, null, { pure: false })(NavigationContainer);
 

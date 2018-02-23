@@ -4,20 +4,16 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from 'react-bootstrap';
 
-export default function CategoryItem({ label, _id, deleteCategory }) {
+export default function CategoryItem({ label }) {
     return (
-        <li className="list-group-item">
+        <div>
             { label }
-            <Button id="delete-category" bsSize="small" bsStyle="danger" onClick={ () => { deleteCategory(_id) }  }>Delete</Button>
-        </li>
+        </div>
     );
 }
 
 CategoryItem.propTypes = {
-    _id: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
-    deleteCategory: PropTypes.func.isRequired,
 };
 

@@ -5,31 +5,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
-import { Panel, Button } from 'react-bootstrap';
 import _ from 'lodash';
 
+import { Container, Button, Form, Message } from 'semantic-ui-react'
 import 'react-widgets/dist/css/react-widgets.css';
 
 export function renderField(field) {
+    //error's value is from validate(field)
     const { meta: { touched, error }, fieldConfig, label, input, type  } = field;
-    const className = `form-group ${ touched && error ? 'has-danger': '' }`;
 
     return (
-        <div className={className}>
+        <div >
             <label>
                 { label }
             </label>
 
             <div>
-                <fieldConfig.inputType className="form-control" { ...input } placeholder={ label } />
-
-                { touched &&
-                (error &&
-                    <span className="text-help">
-                        {error}
-                    </span>
-                )
-                }
+                <Form.Field { ...input }
+                            control={ fieldConfig.inputType }
+                            type={ type }
+                            placeholder={ label }
+                            error={ error && touched }/>
+                {/*{ touched && error && (*/}
+                    {/*<Message*/}
+                        {/*error={ true }*/}
+                        {/*header={ error }>*/}
+                    {/*</Message>*/}
+                    {/*)*/}
+                {/*}*/}
             </div>
         </div>
     );
@@ -45,6 +48,15 @@ class GenericForm extends React.Component {
         initialValues: PropTypes.object,
     };
 
+    constructor(props, context){
+        super(props, context);
+
+        this.uploadingForm = this.uploadingForm.bind(this);
+        this.state = {
+            submitting: false,
+        };
+    }
+
     componentDidMount() {
         const { initialize, initialValues } = this.props;
         if(initialValues) {
@@ -52,13 +64,24 @@ class GenericForm extends React.Component {
         }
     }
 
+    uploadingForm(isUploading) {
+        this.setState({ submitting: isUploading });
+    }
+
     render() {
         const { handleSubmit, submitButtonName, fields,
-                componentForField, pristine, reset, submitting, submitForm } = this.props;
+                componentForField, pristine, reset, submitForm } = this.props;
+        const { state, uploadingForm } = this;
 
         return (
-            <Panel>
-                <form onSubmit={ handleSubmit(data => submitForm(data)) }>
+            <Container style={{ background: "transparent", padding: "10px 20px", margin: "10px auto", borderRadius: "8px", fontFamily: "Georgia, 'Times New Roman', Times, serif"}}>
+                <Form loading={ state.submitting } error onSubmit={
+                    handleSubmit(async data => {
+                        uploadingForm(true);
+                        await submitForm(data);
+                        uploadingForm(false);
+                        reset();
+                        })}>
                     {
                         _.map(fields, (fieldConfig, field) => {
                             return ( <Field
@@ -72,21 +95,27 @@ class GenericForm extends React.Component {
                             />)
                         })
                     }
-                    <div id="paintingFormButton">
-                        <Button
-                            id="saveb"
-                            type="submit"
-                            bsSize="lg"
-                            disabled={ pristine || submitting }
-                            bsStyle="primary">
-                            { submitButtonName }
-                        </Button>
-                        <Button type="button" bsSize="lg" bsStyle="warning" disabled={ pristine || submitting } onClick={ reset }>
+                    <Button.Group attached style={{ paddingTop: "10px" }}>
+                        <Button color="yellow" disabled={ pristine || state.submitting } onClick={ reset }>
                             Clear
                         </Button>
-                    </div>
-                </form>
-            </Panel>
+                        <Button color="blue"
+                                     type="submit"
+                                     primary
+                                     disabled={ pristine || state.submitting }>
+                            { submitButtonName }
+                        </Button>
+                        {/*<Button*/}
+                            {/*id="saveb"*/}
+                            {/*type="submit"*/}
+                            {/*color="blue"*/}
+                            {/*disabled={ pristine || submitting }>*/}
+                            {/*{ submitButtonName }*/}
+                        {/*</Button>*/}
+
+                    </Button.Group>
+                </Form>
+            </Container>
         );
     }
 }

@@ -29,9 +29,9 @@ mongoose.Promise = global.Promise;
 
 console.log("env", process.env.NODE_ENV);
 // if(process.env.NODE_ENV === 'production') {
-//     mongoose.connect('mongodb://demouser:demo@ds139964.mlab.com:39964/eli-collections', options);
+    mongoose.connect('mongodb://demouser:demo@ds139964.mlab.com:39964/eli-collections', options);
 // }else {
-    mongoose.connect('mongodb://localhost:27017/art-collection', options);
+//     mongoose.connect('mongodb://localhost:27017/art-collection', options);
 // }
 
 

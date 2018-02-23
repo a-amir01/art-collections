@@ -11,6 +11,9 @@ import thunk from 'redux-thunk';
 import reducers from './reducers/index';
 import ClientRoutes from './components/ClientRoutes';
 
+import 'semantic-ui-css/semantic.min.css';
+import './style.css';
+
 //import registerServiceWorker from './registerServiceWorker';
 
 // const store = createStore(reducers,{}, applyMiddleware(thunk, logger));

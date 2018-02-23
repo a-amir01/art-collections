@@ -10,13 +10,17 @@
  */
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import _ from 'lodash';
 import DropdownList from 'react-widgets/lib/DropdownList';
-import { Col, Row, Well, Image } from 'react-bootstrap';
+// import { Col, Row, Well } from 'react-bootstrap';
+import { Image, Container, Message, Dropdown, Header } from 'semantic-ui-react';
 
 import GenericForm, { renderField } from '../../utils/GenericForm';
+import CategoryForm from "../category/CategoryForm";
+import CategoryFormContainer from "../../../containers/category/CategoryFormContainer";
 
 /*
 * Must be passed an onSave call back which takes in the form as jason and the form name
@@ -24,7 +28,8 @@ import GenericForm, { renderField } from '../../utils/GenericForm';
 
 function validate(value) {
     console.log("in validate!!", value);
-    return value ? undefined : 'Required';
+    return value ? undefined
+        : "Field is Required!";
 }
 
 const FIELDS = {
@@ -32,21 +37,20 @@ const FIELDS = {
         fieldName: "title",
         label: "Title",
         inputType: "input",
-        type: "",
+        type: "text",
         validate: validate,
     },
     size: {
         fieldName: "size",
         label: "Size",
         inputType: "input",
-        type: "",
+        type: "text",
         validate: validate,
     },
     description: {
         fieldName: "description",
         label: "Description",
         inputType: "textarea",
-        type: "",
         validate: validate,
     },
     category: {
@@ -95,24 +99,37 @@ class PaintingForm extends React.Component {
     renderMultiselect(field) {
         const { meta: { touched, error }, input } = field;
         const className = `form-group ${touched && error ? 'has-danger': ''}`;
-        const categoryLabels = this.props.categories.map(({ category }) => category);
+        let categoryLabels = this.props.categories.map(({ category }) => {
+            return {
+                key: category,
+                content: category,
+                value: category,
+                text: category,
+            }
+        });
+
+        // alert(JSON.stringify(categoryLabels));
+
         return (
             <div className={className}>
                 <label>
                     { field.label }
                 </label>
-                <DropdownList {...input}
-                              data={ categoryLabels }
-                              valueField="value"
-                              textField="color"
-                              onChange={input.onChange} />
-                { touched &&
-                    (error &&
-                        <span className="text-help">
-                            {error}
-                        </span>
-                    )
-                }
+                <Dropdown { ...input }
+                    selection
+                    fluid
+                    options={ categoryLabels }
+                    onChange={ (param, data) => { input.onChange(data.value) }}
+                    placeholder='Choose an option'
+                    error={ error && touched  }
+                />
+                {/*{ touched &&*/}
+                    {/*(error &&*/}
+                        {/*<span className="text-help">*/}
+                            {/*{error}*/}
+                        {/*</span>*/}
+                    {/*)*/}
+                {/*}*/}
             </div>
         )
     }
@@ -183,24 +200,21 @@ class PaintingForm extends React.Component {
         }
 
         return (
-            <Well>
-                <Row>
-                    <Col xs={8} sm={6}>
-                        <GenericForm
-                            form={ form }
-                            submitForm={ formSubmitFunction }
-                            // onSubmit={ this.submit }
-                            componentForField={ this.getComponentForField }
-                            fields={ FIELDS }
-                            initialValues={ initialValues }
-                            submitButtonName="Save"
-                        />
-                    </Col>
-                    <Col xs={10} sm={6}>
-                        <Image src={ image } responsive rounded />
-                    </Col>
-                </Row>
-            </Well>
+            <Container style={{ background: "#f4f7f8", padding: "10px 20px", margin: "10px auto", borderRadius: "8px" }}>
+                    <GenericForm
+                        form={ form }
+                        submitForm={ formSubmitFunction }
+                        // onSubmit={ this.submit }
+                        componentForField={ this.getComponentForField }
+                        fields={ FIELDS }
+                        initialValues={ initialValues }
+                        submitButtonName="Save"
+                    />
+
+
+                    <Image src={image} size='large' centered rounded/>
+                    {/*<Image src={ image } responsive rounded />*/}
+            </Container>
         )
     }
 }

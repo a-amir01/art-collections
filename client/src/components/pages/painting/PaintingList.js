@@ -6,21 +6,23 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Painting from './Painting';
 
+import { Container, Segment } from 'semantic-ui-react'
+
 // https://masonry.desandro.com/
 
 function generateElements(paintings, categories, category, dispatchUpdatePainting) {
 
     return paintings.map(painting=>{
-        console.log("PaintingList: Generating paintings\n");
+        console.log("PaintingList: Generating paintings ", JSON.stringify(paintings));
         return (
-            <div key={ painting._id }>
+            <Segment padded="very" key={ painting._id } style={{ background: "#ccb508"}}>
                 <Painting
                     painting={ painting }
                     dispatchUpdatePainting={ dispatchUpdatePainting }
                     category={ category }
                     categories={ categories }
                 />
-            </div>
+            </Segment>
         )
     });
 }
@@ -33,7 +35,9 @@ function PaintingList ({ paintings, categories, category, dispatchUpdatePainting
         return (
             <div>
                 <h1>{ category }</h1>
-                { paintingList }
+                <Container style={{ background: "#9e8b08", padding: "30px 30px", margin: "10px auto", borderRadius: "8px" }}>
+                    { paintingList }
+                </Container>
             </div>
         );
 }

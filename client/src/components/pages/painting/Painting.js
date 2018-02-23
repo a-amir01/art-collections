@@ -4,7 +4,9 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Image, Row, Col, Well, Button } from 'react-bootstrap';
+import { Row, Col, Well } from 'react-bootstrap';
+
+import { Button, Image, Grid, Container, Icon } from 'semantic-ui-react'
 
 import PaintingForm from './PaintingForm';
 
@@ -30,10 +32,10 @@ class Painting extends React.Component {
         this.setState({ isEditing: !isEditing });
     }
 
-    updatePainting(values) {
+    async updatePainting(values) {
         const { dispatchUpdatePainting } = this.props;
         const { isEditing } = this.state;
-        dispatchUpdatePainting(values);
+        await dispatchUpdatePainting(values);
         this.setState({ isEditing: !isEditing });
     }
 
@@ -46,11 +48,12 @@ class Painting extends React.Component {
 
         const { readMore, painting: { title, description, image, _id }, categories } = this.props;
         const { isEditing } = this.state;
-        // style={{ display: "block",  marginLeft: 'auto', marginRight: 'auto', width: "50%"}}
+
         if(isEditing) {
             return (
-                <div>
-                    <Button bsStyle="danger" style={{ float: "right", opacity: "50%", color:"black" }} onClick={ this.cancelUpdate }>X</Button>
+                <Container >
+
+                    <div onClick={ this.cancelUpdate } style={{ float: "right", cursor: "pointer", marginTop: "5px" }}><Icon name="remove circle" color="red" size="big"/></div>
                     <PaintingForm
                        _id={ _id }
                        form={ `${ title }-${ _id }` }
@@ -60,20 +63,17 @@ class Painting extends React.Component {
                        initialValues={ this.props.painting }
                        shouldUpdateForm={ true }
                     />
-                </div>
+                </Container>
+
             )
         }
 
         return(
-            <div>
-                <Well>
-                    <Row>
-                        <Col xs={10} md={8}>
-                            {/*<img style={{ display: 'inline-block', marginLeft: 'auto', marginRight: 'auto', position: 'relative' }} src={ image } />*/}
-                            <Image src={ image } rounded />
-                            {/*<img style={{ display: 'block', marginLeft: 'auto', marginRight: 'auto' }} src={ image } />*/}
-                        </Col>
-                        <Col xs={6} md={4}>
+            <Container>
+                <Grid padded>
+                    <Grid.Row>
+                        <Grid.Column/>
+                        <Grid.Column width={3}>
                             <h6>Title: { title }</h6>
                             <p>Description: { (description.length > 18 && readMore === false) ?
                                 (description.substring(0,18)) : (description) }
@@ -83,10 +83,13 @@ class Painting extends React.Component {
                                 {/*</button>*/}
                             </p>
                             <Button onClick={ this.editPainting }>Edit</Button>
-                        </Col>
-                    </Row>
-                </Well>
-            </div>
+                        </Grid.Column>
+                        <Grid.Column width={10}>
+                            <Image src={ image } size='large' centered rounded />
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Container>
         );
     }
 }

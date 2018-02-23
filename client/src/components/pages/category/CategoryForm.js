@@ -5,7 +5,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Col, Row, Well } from 'react-bootstrap';
+import { Container, Grid } from 'semantic-ui-react'
 
 import GenericForm, { renderField } from '../../utils/GenericForm';
 import CategoryListContainer from '../../../containers/category/CategoryListContainer';
@@ -21,7 +21,7 @@ const FIELDS = {
         fieldName: "category",
         label: "category",
         inputType: "input",
-        type: "",
+        type: "text",
         validate: validate,
     }
 };
@@ -48,10 +48,10 @@ class CategoryForm extends React.Component {
         }
     }
 
-    submit(values) {
+    async submit(values) {
         const { dispatchAddCategory } = this.props;
         values.category = values.category.replace(/ /g, "");
-        dispatchAddCategory(values);
+        await dispatchAddCategory(values);
 
         //addImageToForm
         //"./uploads is from root of eli-collections/upload
@@ -60,23 +60,30 @@ class CategoryForm extends React.Component {
     render() {
         const { form } = this.props;
         return (
-            <Well>
-                <Row>
-                    <Col xs={12} sm={6}>
-                        <GenericForm
-                            form={ form }
-                            submitForm={ this.submit }
-                            componentForField={ this.getComponentForField }
-                            fields={ FIELDS }
-                            submitButtonName="Save"
-                        />
-                    </Col>
-                    <Col xs={12} sm={6}>
-                        <CategoryListContainer/>
-                    </Col>
-                </Row>
+            <Container >
+                <Grid padded divided columns={1}>
 
-            </Well>
+                    <Grid.Row style={{ background: "#f4f7f8", padding: "10px 20px", margin: "10px auto", borderRadius: "8px" }}>
+                        <Grid.Column>
+                            <GenericForm
+                                form={ form }
+                                submitForm={ this.submit }
+                                componentForField={ this.getComponentForField }
+                                fields={ FIELDS }
+                                submitButtonName="Save"
+                            />
+                        </Grid.Column>
+
+                    </Grid.Row>
+
+                    <Grid.Row>
+                        <Grid.Column>
+                            <CategoryListContainer/>
+                        </Grid.Column>
+
+                    </Grid.Row>
+                </Grid>
+            </Container>
         );
     }
 }

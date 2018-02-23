@@ -1,5 +1,4 @@
 body {
-    padding: 50px;
     font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
@@ -24,3 +23,8 @@ img {
 #paintingFormButton {
     margin-top: 2%;
 }
+
+/*.ui.menu .ui.dropdown .menu>.item{*/
+    /*padding: 0;*/
+    /*background-color: #1c1d1d;*/
+/*}*/
